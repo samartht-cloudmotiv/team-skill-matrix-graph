@@ -122,8 +122,74 @@
   }
   body {
     @apply bg-background text-foreground;
+    background: radial-gradient(ellipse at 20% 20%, #1a0a2e 0%, #0f0a1a 40%, #080612 100%);
+    min-height: 100vh;
+    overflow: hidden;
   }
   html {
     @apply font-sans;
   }
+}
+
+/* Expert edge animated dash */
+@keyframes dash-flow {
+  from { stroke-dashoffset: 48; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* React Flow overrides */
+.react-flow__renderer {
+  background: transparent !important;
+}
+.react-flow__pane {
+  cursor: default !important;
+}
+/* Allow node tooltips to overflow outside node bounds */
+.react-flow__node {
+  transition: filter 0.3s;
+  overflow: visible !important;
+}
+.react-flow__node > div {
+  overflow: visible !important;
+}
+/* Ensure edges SVG layer is above node backgrounds but below tooltips */
+.react-flow__edges {
+  z-index: 2;
+}
+.react-flow__controls {
+  bottom: 80px !important; /* move up so it doesn't overlap legend */
+}
+.react-flow__controls-button {
+  background: rgba(10, 7, 25, 0.9) !important;
+  border-color: rgba(234, 179, 8, 0.18) !important;
+  color: #d97706 !important;
+  fill: #d97706 !important;
+  border-radius: 6px !important;
+  margin-bottom: 2px !important;
+}
+.react-flow__controls-button:hover {
+  background: rgba(92, 37, 7, 0.5) !important;
+  border-color: rgba(234, 179, 8, 0.5) !important;
+}
+.react-flow__minimap {
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+.react-flow__minimap-mask {
+  fill: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(234, 179, 8, 0.2);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 179, 8, 0.4);
 }

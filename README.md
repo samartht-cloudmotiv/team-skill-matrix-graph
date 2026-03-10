@@ -1,36 +1,116 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Team Skill Matrix Graph
+
+An interactive, visually immersive Team Skill Matrix Graph built for Assignment 2. Visualises team members, their skills, and proficiency levels as a force-directed graph with an **RPG Skill Tree** aesthetic — think Path of Exile meets a team dashboard.
+
+## Features
+
+- **Interactive Graph** — Force-directed layout with drag-and-drop node positioning
+- **RPG Visual Theme** — Dark atmospheric background, gold character-card person nodes, category-coloured hexagonal skill nodes
+- **Proficiency Levels** — Learning / Familiar / Expert visualised via star ratings, edge thickness, and animated glow effects
+- **Parallax Particle Background** — Multi-layer depth effect with nebula blobs and floating motes
+- **Full CRUD** — Add, edit, and delete people, skills, and connections via polished dialogs
+- **Detail Panels** — Character sheet (person) and ability info (skill) panels slide in on node click
+- **Guild Stats Panel** — Team overview: top skills leaderboard, skill gaps, proficiency distribution, hero rankings
+- **Node Highlighting** — Click a node to highlight connected nodes; unconnected nodes dim out
+- **Persistent State** — All data stored in `localStorage` via Zustand; survives page refreshes
+- **Seed Data** — Ships with realistic sample team data loaded on first visit from CSV files
+
+## Tech Stack
+
+| Concern | Library |
+|---|---|
+| Framework | Next.js 15 (App Router) + TypeScript |
+| Graph | `@xyflow/react` (React Flow v12) |
+| Layout | `d3-force` (synchronous, stable) |
+| Animations | Framer Motion |
+| State | Zustand + `persist` middleware |
+| UI Components | shadcn/ui (base-ui) |
+| Styling | Tailwind CSS |
+| Icons | Lucide React |
+| CSV Parsing | PapaParse |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/samartht-cloudmotiv/team-skill-matrix-graph.git
+cd team-skill-matrix-graph
+
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
+### Navigating the Graph
+- **Pan** — Click and drag on the background
+- **Zoom** — Scroll wheel or use the zoom controls (bottom-left)
+- **Move nodes** — Drag any node; positions persist until you click "Reset Layout"
+- **Select a node** — Click to open the detail panel and highlight connected nodes
+- **Deselect** — Click the same node again, or click the background, or press the X on the panel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Managing Data
+- **Add** — Use the **+** button in the header to add a person, skill, or connection
+- **Edit** — Open the detail panel for a node, then click the Edit (pencil) icon
+- **Delete** — Open the detail panel, click the trash icon; connections cascade-delete automatically
+- **Link skills** — From a person's detail panel, click "Link Skill" to create a proficiency connection
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Proficiency Levels
+| Level | Stars | Edge Style |
+|---|---|---|
+| Learning | ★☆☆ | Thin dashed, dim |
+| Familiar | ★★☆ | Medium solid |
+| Expert | ★★★ | Thick solid + animated pulse glow |
 
-## Deploy on Vercel
+### Node Types
+| Type | Shape | Colour |
+|---|---|---|
+| Person | Rounded card | Gold / amber |
+| Skill — Frontend | Hexagon | Emerald green |
+| Skill — Backend | Hexagon | Indigo blue |
+| Skill — DevOps | Hexagon | Amber orange |
+| Skill — Design | Hexagon | Rose pink |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Seed Data
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+On first load, the app seeds sample data from:
+- `public/data/people.csv` — Team members with roles
+- `public/data/skills.csv` — Skills with categories
+- `public/data/connections.csv` — Who knows what, at what proficiency level
+
+To reset to seed data: open your browser's DevTools → Application → Local Storage → delete the `skill-matrix` key, then refresh.
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages + global styles
+├── components/
+│   ├── graph/              # React Flow nodes, edges, particle background
+│   ├── panels/             # Detail panels (person, skill, summary)
+│   ├── forms/              # CRUD dialogs (add/edit/delete)
+│   └── layout/             # Header, Legend
+├── hooks/                  # useGraphData, useSeedData
+└── lib/                    # Store (Zustand), types, constants, layout (d3-force)
+public/
+└── data/                   # Seed CSV files
+```
