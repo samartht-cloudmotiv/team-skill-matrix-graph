@@ -135,19 +135,16 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
 
           {/* Palette picker */}
           <Popover open={paletteOpen} onOpenChange={setPaletteOpen}>
-            <PopoverTrigger asChild>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="gap-1.5 text-xs h-8 transition-all"
-                style={{
-                  color: paletteOpen ? t.accent : t.mutedText,
-                  border: paletteOpen ? `1px solid ${t.accentBorder}` : '1px solid transparent',
-                  background: paletteOpen ? t.accentBg : 'transparent',
-                }}
-              >
-                <Palette size={13} />
-              </Button>
+            <PopoverTrigger
+              className="inline-flex items-center justify-center h-8 w-8 rounded-md transition-all"
+              style={{
+                color: paletteOpen ? t.accent : t.mutedText,
+                border: paletteOpen ? `1px solid ${t.accentBorder}` : '1px solid transparent',
+                background: paletteOpen ? t.accentBg : 'transparent',
+                cursor: 'pointer',
+              }}
+            >
+              <Palette size={13} />
             </PopoverTrigger>
             <PopoverContent
               align="end"
