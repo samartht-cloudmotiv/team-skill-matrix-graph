@@ -11,36 +11,44 @@ interface Particle {
   size: number;
   opacity: number;
   opacityDelta: number;
-  layer: number; // 1=far/tiny, 2=mid, 3=close/large, 4=foreground sparkle
+  layer: number;
 }
 
 interface Props {
   mouseX?: MotionValue<number>;
   mouseY?: MotionValue<number>;
+  isDark?: boolean;
 }
 
-// Per-layer parallax multipliers
 const LAYER_PARALLAX = { 1: 6, 2: 16, 3: 32, 4: 55 };
-// Per-layer colors — professional cold blue/slate palette
-const LAYER_COLOR: Record<number, [number, number, number]> = {
-  1: [70,  110, 180],  // far: medium navy
-  2: [90,  140, 210],  // mid: slate blue
-  3: [110, 165, 235],  // close: steel blue
-  4: [150, 200, 255],  // foreground: light blue
+
+// Dark theme — vivid blue/slate particles
+const LAYER_COLOR_DARK: Record<number, [number, number, number]> = {
+  1: [70,  110, 180],
+  2: [90,  140, 210],
+  3: [110, 165, 235],
+  4: [150, 200, 255],
 };
-// Per-layer size ranges [min, range]
+// Light theme — subtle steel-blue particles (barely visible)
+const LAYER_COLOR_LIGHT: Record<number, [number, number, number]> = {
+  1: [130, 150, 185],
+  2: [115, 135, 175],
+  3: [100, 120, 165],
+  4: [85,  105, 155],
+};
+
 const LAYER_SIZE: Record<number, [number, number]> = {
   1: [0.3, 0.5],
   2: [0.5, 0.6],
   3: [0.8, 1.0],
   4: [1.3, 1.1],
 };
-// Per-layer opacity — visible but professional
-const LAYER_OPACITY_MAX: Record<number, number> = { 1: 0.28, 2: 0.38, 3: 0.48, 4: 0.6 };
-// Per-layer count weight
+
+const LAYER_OPACITY_MAX_DARK:  Record<number, number> = { 1: 0.28, 2: 0.38, 3: 0.48, 4: 0.6 };
+const LAYER_OPACITY_MAX_LIGHT: Record<number, number> = { 1: 0.05, 2: 0.08, 3: 0.11, 4: 0.16 };
+
 const LAYER_WEIGHT = { 1: 4, 2: 2.5, 3: 1.2, 4: 0.3 };
 
-// Subtle depth gradient blobs (very faint — professional atmosphere only)
 const NEBULAE = [
   { cx: 0.15, cy: 0.2,  r: 0.4,  color: '30, 70, 160',  opacity: 0.045, parallax: 0.25 },
   { cx: 0.82, cy: 0.7,  r: 0.45, color: '20, 55, 140',  opacity: 0.038, parallax: 0.18 },
@@ -49,20 +57,21 @@ const NEBULAE = [
   { cx: 0.22, cy: 0.78, r: 0.28, color: '25, 60, 145',  opacity: 0.028, parallax: 0.35 },
 ];
 
-export default function ParticleBackground({ mouseX, mouseY }: Props) {
+export default function ParticleBackground({ mouseX, mouseY, isDark = true }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isDarkRef = useRef(isDark);
 
-  // Always call hooks unconditionally
+  // Track isDark changes so the draw loop picks them up without restarting
+  useEffect(() => { isDarkRef.current = isDark; }, [isDark]);
+
   const fallbackX = useMotionValue(0);
   const fallbackY = useMotionValue(0);
   const rawX = mouseX ?? fallbackX;
   const rawY = mouseY ?? fallbackY;
 
-  // Smooth the mouse movement with spring physics
   const smoothX = useSpring(rawX, { stiffness: 60, damping: 25 });
   const smoothY = useSpring(rawY, { stiffness: 60, damping: 25 });
 
-  // Store smoothed value in a ref for the canvas draw loop to read
   const mouseRef = useRef({ x: 0, y: 0 });
   useEffect(() => {
     const unsubX = smoothX.on('change', (v) => { mouseRef.current.x = v; });
@@ -70,11 +79,7 @@ export default function ParticleBackground({ mouseX, mouseY }: Props) {
     return () => { unsubX(); unsubY(); };
   }, [smoothX, smoothY]);
 
-  // Nebula layer parallax via CSS transforms
-  const nebulaX = (parallax: number) => useTransform(smoothX, [-1, 1], [-50 * parallax, 50 * parallax]);
-  const nebulaY = (parallax: number) => useTransform(smoothY, [-1, 1], [-35 * parallax, 35 * parallax]);
-
-  // Pre-compute all nebula transforms (hooks must be at top level)
+  // Nebula parallax transforms (hooks must stay at top level)
   const n0x = useTransform(smoothX, [-1, 1], [-50 * NEBULAE[0].parallax, 50 * NEBULAE[0].parallax]);
   const n0y = useTransform(smoothY, [-1, 1], [-35 * NEBULAE[0].parallax, 35 * NEBULAE[0].parallax]);
   const n1x = useTransform(smoothX, [-1, 1], [-50 * NEBULAE[1].parallax, 50 * NEBULAE[1].parallax]);
@@ -87,11 +92,8 @@ export default function ParticleBackground({ mouseX, mouseY }: Props) {
   const n4y = useTransform(smoothY, [-1, 1], [-35 * NEBULAE[4].parallax, 35 * NEBULAE[4].parallax]);
 
   const nebulaTransforms = [
-    { x: n0x, y: n0y },
-    { x: n1x, y: n1y },
-    { x: n2x, y: n2y },
-    { x: n3x, y: n3y },
-    { x: n4x, y: n4y },
+    { x: n0x, y: n0y }, { x: n1x, y: n1y }, { x: n2x, y: n2y },
+    { x: n3x, y: n3y }, { x: n4x, y: n4y },
   ];
 
   useEffect(() => {
@@ -105,7 +107,7 @@ export default function ParticleBackground({ mouseX, mouseY }: Props) {
 
     function resize() {
       if (!canvas) return;
-      canvas.width = window.innerWidth;
+      canvas.width  = window.innerWidth;
       canvas.height = window.innerHeight;
     }
 
@@ -113,6 +115,7 @@ export default function ParticleBackground({ mouseX, mouseY }: Props) {
       if (!canvas) return;
       particles = [];
       const base = Math.floor((canvas.width * canvas.height) / 5000);
+      const opMax = isDarkRef.current ? LAYER_OPACITY_MAX_DARK : LAYER_OPACITY_MAX_LIGHT;
       for (let layer = 1; layer <= 4; layer++) {
         const count = Math.floor(base * LAYER_WEIGHT[layer as keyof typeof LAYER_WEIGHT]);
         const speed = layer * 0.035;
@@ -124,7 +127,7 @@ export default function ParticleBackground({ mouseX, mouseY }: Props) {
             vx: (Math.random() - 0.5) * speed,
             vy: (Math.random() - 0.5) * speed - layer * 0.015,
             size: sMin + Math.random() * sRange,
-            opacity: Math.random() * LAYER_OPACITY_MAX[layer] * 0.6 + 0.03,
+            opacity: Math.random() * opMax[layer] * 0.6 + 0.01,
             opacityDelta: (Math.random() - 0.5) * 0.003,
             layer,
           });
@@ -136,15 +139,17 @@ export default function ParticleBackground({ mouseX, mouseY }: Props) {
       if (!canvas || !ctx) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const mx = mouseRef.current.x; // -1 to 1
+      const dark  = isDarkRef.current;
+      const color = dark ? LAYER_COLOR_DARK : LAYER_COLOR_LIGHT;
+      const opMax = dark ? LAYER_OPACITY_MAX_DARK : LAYER_OPACITY_MAX_LIGHT;
+      const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
 
-      // Draw each layer with its own parallax offset
       for (let layer = 1; layer <= 4; layer++) {
         const offsetX = mx * LAYER_PARALLAX[layer as keyof typeof LAYER_PARALLAX];
         const offsetY = my * LAYER_PARALLAX[layer as keyof typeof LAYER_PARALLAX];
-        const [r, g, b] = LAYER_COLOR[layer];
-        const maxOp = LAYER_OPACITY_MAX[layer];
+        const [r, g, b] = color[layer];
+        const maxOp = opMax[layer];
 
         ctx.save();
         ctx.translate(offsetX, offsetY);
@@ -156,13 +161,12 @@ export default function ParticleBackground({ mouseX, mouseY }: Props) {
             p.y += p.vy;
             p.opacity += p.opacityDelta;
 
-            if (p.opacity <= 0.02 || p.opacity >= maxOp) p.opacityDelta *= -1;
-            if (p.x < -100) p.x = canvas.width + 100;
-            if (p.x > canvas.width + 100) p.x = -100;
+            if (p.opacity <= 0.01 || p.opacity >= maxOp) p.opacityDelta *= -1;
+            if (p.x < -100) p.x = canvas.width  + 100;
+            if (p.x > canvas.width  + 100) p.x = -100;
             if (p.y < -100) p.y = canvas.height + 100;
             if (p.y > canvas.height + 100) p.y = -100;
 
-            // Larger particles get a glow
             if (layer >= 3) {
               ctx.beginPath();
               ctx.arc(p.x, p.y, p.size * 2.5, 0, Math.PI * 2);
@@ -196,8 +200,8 @@ export default function ParticleBackground({ mouseX, mouseY }: Props) {
 
   return (
     <>
-      {/* Nebula blobs — each with independent parallax via CSS */}
-      {NEBULAE.map((n, i) => (
+      {/* Nebula blobs — dark themes only (look bad on light backgrounds) */}
+      {isDark && NEBULAE.map((n, i) => (
         <motion.div
           key={i}
           className="fixed pointer-events-none"
@@ -217,7 +221,6 @@ export default function ParticleBackground({ mouseX, mouseY }: Props) {
         />
       ))}
 
-      {/* Particle canvas — no whole-canvas shift; per-layer shift is done in draw() */}
       <canvas
         ref={canvasRef}
         className="fixed inset-0 pointer-events-none"

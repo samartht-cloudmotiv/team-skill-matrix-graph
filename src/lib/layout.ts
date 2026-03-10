@@ -1,72 +1,70 @@
 import { Node } from '@xyflow/react';
-import {
-  forceSimulation,
-  forceLink,
-  forceManyBody,
-  forceCenter,
-  forceCollide,
-  SimulationNodeDatum,
-  SimulationLinkDatum,
-} from 'd3-force';
 
-interface SimNode extends SimulationNodeDatum {
-  id: string;
-  type: string;
-}
+const CATEGORY_ORDER = ['Frontend', 'Backend', 'DevOps', 'Design', 'Data', 'Other'];
 
-interface SimLink extends SimulationLinkDatum<SimNode> {
-  source: string;
-  target: string;
-}
-
+/**
+ * Deterministic bipartite layout:
+ *   • People  → single column on the left, sorted alphabetically
+ *   • Skills  → grid on the right, sorted by category then name
+ *
+ * No randomness — Reset Layout always produces the same result.
+ */
 export function computeLayout(
   nodes: Node[],
-  edges: { source: string; target: string }[],
+  _edges: { source: string; target: string }[],
   width = 1400,
-  height = 900
+  height = 900,
 ): Map<string, { x: number; y: number }> {
   if (nodes.length === 0) return new Map();
 
-  const simNodes: SimNode[] = nodes.map((n) => ({
-    id: n.id,
-    type: n.type ?? 'person',
-    x: n.position.x || Math.random() * width,
-    y: n.position.y || Math.random() * height,
-  }));
+  const personNodes = nodes.filter((n) => n.type === 'person');
+  const skillNodes  = nodes.filter((n) => n.type === 'skill');
+  const positions   = new Map<string, { x: number; y: number }>();
 
-  const nodeById = new Map(simNodes.map((n) => [n.id, n]));
+  // ── People: left column, alphabetical ───────────────────────────────────
+  const sortedPeople = [...personNodes].sort((a, b) =>
+    String(a.data.name ?? '').localeCompare(String(b.data.name ?? ''))
+  );
 
-  const simLinks: SimLink[] = edges
-    .filter((e) => nodeById.has(e.source) && nodeById.has(e.target))
-    .map((e) => ({ source: e.source, target: e.target }));
+  const pCount  = sortedPeople.length;
+  const pGap    = Math.min(140, Math.max(80, (height - 160) / Math.max(pCount, 1)));
+  const pTotalH = (pCount - 1) * pGap;
+  const pStartY = (height - pTotalH) / 2;
+  const pX      = width * 0.13;
 
-  const simulation = forceSimulation(simNodes)
-    .force(
-      'link',
-      forceLink<SimNode, SimLink>(simLinks)
-        .id((d) => d.id)
-        .distance(300)   // larger distance keeps nodes well separated
-        .strength(0.4)
-    )
-    .force(
-      'charge',
-      forceManyBody().strength((d) => ((d as SimNode).type === 'person' ? -1400 : -700))
-    )
-    .force('center', forceCenter(width / 2, height / 2))
-    .force(
-      'collide',
-      forceCollide()
-        .radius((d) => ((d as SimNode).type === 'person' ? 130 : 105))
-        .strength(1)
-        .iterations(4)
-    )
-    .stop();
-
-  for (let i = 0; i < 600; i++) simulation.tick();
-
-  const positions = new Map<string, { x: number; y: number }>();
-  simNodes.forEach((n) => {
-    positions.set(n.id, { x: n.x ?? 0, y: n.y ?? 0 });
+  sortedPeople.forEach((p, i) => {
+    positions.set(p.id, { x: pX, y: pStartY + i * pGap });
   });
+
+  // ── Skills: right-side grid, by category then name ───────────────────────
+  const sortedSkills = [...skillNodes].sort((a, b) => {
+    const catA = CATEGORY_ORDER.indexOf(String(a.data.category ?? 'Other'));
+    const catB = CATEGORY_ORDER.indexOf(String(b.data.category ?? 'Other'));
+    if (catA !== catB) return catA - catB;
+    return String(a.data.name ?? '').localeCompare(String(b.data.name ?? ''));
+  });
+
+  const sCount = sortedSkills.length;
+  if (sCount === 0) return positions;
+
+  // Choose column count for a roughly landscape grid
+  const cols = sCount <= 3 ? sCount : sCount <= 8 ? 3 : sCount <= 15 ? 4 : 5;
+  const rows = Math.ceil(sCount / cols);
+
+  const rightW  = width * 0.56;
+  const sGapX   = Math.min(195, rightW / Math.max(cols, 1));
+  const sGapY   = Math.min(155, (height - 130) / Math.max(rows, 1));
+  const sStartX = width * 0.41;
+  const sStartY = (height - (rows - 1) * sGapY) / 2;
+
+  sortedSkills.forEach((s, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    positions.set(s.id, {
+      x: sStartX + col * sGapX,
+      y: sStartY + row * sGapY,
+    });
+  });
+
   return positions;
 }
