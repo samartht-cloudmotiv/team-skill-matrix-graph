@@ -57,12 +57,12 @@ export default function ConnectionForm({ open, onClose, prefilledPersonId, prefi
         }}
       >
         <DialogHeader>
-          <DialogTitle style={{ color: '#818cf8' }}>⚡ Link Skill</DialogTitle>
+          <DialogTitle style={{ color: '#818cf8' }}>Link Skill</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-2">
           {/* Person selector */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium" style={{ color: '#a5b4fc' }}>Hero</label>
+            <label className="text-xs font-medium" style={{ color: '#a5b4fc' }}>Member</label>
             <Select
               value={personId}
               onValueChange={(v) => v && setPersonId(v)}
@@ -84,7 +84,7 @@ export default function ConnectionForm({ open, onClose, prefilledPersonId, prefi
                 }}
               >
                 {availablePeople.map((p) => (
-                  <SelectItem key={p.id} value={p.id} style={{ color: '#e2c87a' }}>
+                  <SelectItem key={p.id} value={p.id} style={{ color: '#e2e8f0' }}>
                     {p.name} — {p.role}
                   </SelectItem>
                 ))}

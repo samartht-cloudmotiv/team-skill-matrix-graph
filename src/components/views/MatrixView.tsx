@@ -97,13 +97,12 @@ export default function MatrixView() {
 
   if (people.length === 0 || skills.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full" style={{ color: '#6b5028' }}>
+      <div className="flex items-center justify-center h-full" style={{ color: '#475569' }}>
         <div className="text-center gap-3 flex flex-col items-center">
-          <div className="text-5xl" style={{ filter: 'drop-shadow(0 0 12px rgba(234,179,8,0.4))' }}>📊</div>
-          <div className="text-sm tracking-widest" style={{ fontFamily: 'var(--font-cinzel), serif' }}>
+          <div className="text-sm tracking-widest" style={{ color: '#64748b' }}>
             No data to display
           </div>
-          <div className="text-xs" style={{ color: '#4a3515' }}>Add heroes and skills to see the matrix</div>
+          <div className="text-xs" style={{ color: '#475569' }}>Add members and skills to see the matrix</div>
         </div>
       </div>
     );
@@ -127,9 +126,9 @@ export default function MatrixView() {
         >
           Skill Matrix
         </div>
-        <div style={{ flex: 1, height: 1, background: 'linear-gradient(to right, rgba(234,179,8,0.3), transparent)' }} />
-        <div className="text-xs" style={{ color: '#4a3515' }}>
-          {people.length} heroes · {skills.length} skills · {connections.length} links
+        <div style={{ flex: 1, height: 1, background: 'linear-gradient(to right, rgba(59,130,246,0.2), transparent)' }} />
+        <div className="text-xs" style={{ color: '#475569' }}>
+          {people.length} members · {skills.length} skills · {connections.length} links
         </div>
       </div>
 
@@ -158,14 +157,14 @@ export default function MatrixView() {
         ))}
         <div className="flex items-center gap-1.5">
           <div style={{ width: 22, height: 16, borderRadius: 4, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }} />
-          <span className="text-xs" style={{ color: '#4a3515' }}>No skill</span>
+          <span className="text-xs" style={{ color: '#475569' }}>No skill</span>
         </div>
         {/* Category dots */}
         <div className="flex items-center gap-3 ml-4 border-l pl-4" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           {SKILL_CATEGORIES.filter((cat) => sortedSkills.some((s) => s.category === cat)).map((cat) => (
             <div key={cat} className="flex items-center gap-1">
               <div style={{ width: 8, height: 8, borderRadius: '50%', background: CATEGORY_COLORS[cat as SkillCategory]?.border ?? '#888' }} />
-              <span className="text-xs" style={{ color: '#6b5028' }}>{cat}</span>
+              <span className="text-xs" style={{ color: '#64748b' }}>{cat}</span>
             </div>
           ))}
         </div>
@@ -196,7 +195,7 @@ export default function MatrixView() {
                     transformOrigin: 'center bottom',
                     whiteSpace: 'nowrap',
                     fontSize: 10,
-                    color: isHighlighted ? (catColor?.border ?? '#fbbf24') : '#9a7640',
+                    color: isHighlighted ? (catColor?.border ?? '#60a5fa') : '#475569',
                     fontWeight: isHighlighted ? 700 : 400,
                     letterSpacing: '0.04em',
                     transition: 'color 0.15s',
@@ -226,11 +225,11 @@ export default function MatrixView() {
                     style={{
                       position: 'absolute', top: 4, left: '50%', transform: 'translateX(-50%)',
                       fontSize: 9, color: catColor?.border ?? '#888', whiteSpace: 'nowrap',
-                      background: 'rgba(8,6,20,0.9)', borderRadius: 3, padding: '1px 4px',
+                      background: 'rgba(4,10,22,0.95)', borderRadius: 3, padding: '1px 4px',
                       border: `1px solid ${catColor?.border}33`,
                     }}
                   >
-                    {stat?.total ?? 0} / {stat?.expert ?? 0}★
+                    {stat?.total ?? 0} / {stat?.expert ?? 0} exp
                   </div>
                 )}
               </div>
@@ -238,7 +237,7 @@ export default function MatrixView() {
           })}
           {/* Totals header */}
           <div style={{ width: 72, flexShrink: 0, height: HEADER_H, display: 'flex', alignItems: 'flex-end', paddingBottom: 18 }}>
-            <span style={{ fontSize: 9, color: '#4a3515', letterSpacing: '0.05em' }}>TOTAL</span>
+            <span style={{ fontSize: 9, color: '#475569', letterSpacing: '0.05em' }}>TOTAL</span>
           </div>
         </div>
 
@@ -247,7 +246,7 @@ export default function MatrixView() {
           style={{
             height: 1,
             marginLeft: ROW_LABEL_W,
-            background: 'linear-gradient(to right, rgba(234,179,8,0.3), rgba(234,179,8,0.05))',
+            background: 'linear-gradient(to right, rgba(59,130,246,0.2), rgba(59,130,246,0.04))',
             marginBottom: 2,
           }}
         />
@@ -275,7 +274,7 @@ export default function MatrixView() {
                   flexShrink: 0,
                   paddingRight: 14,
                   textAlign: 'right',
-                  borderRight: `1px solid ${isPersonHovered ? 'rgba(234,179,8,0.35)' : 'rgba(234,179,8,0.12)'}`,
+                  borderRight: `1px solid ${isPersonHovered ? 'rgba(59,130,246,0.35)' : 'rgba(59,130,246,0.12)'}`,
                   transition: 'border-color 0.15s',
                   paddingTop: 2,
                   paddingBottom: 2,
@@ -284,7 +283,7 @@ export default function MatrixView() {
                 <div
                   style={{
                     fontSize: 12,
-                    color: isPersonHovered ? '#fbbf24' : '#d97706',
+                    color: isPersonHovered ? '#60a5fa' : '#94a3b8',
                     fontWeight: 600,
                     transition: 'color 0.15s',
                     letterSpacing: '0.02em',
@@ -292,7 +291,7 @@ export default function MatrixView() {
                 >
                   {person.name}
                 </div>
-                <div style={{ fontSize: 9, color: '#6b5028', marginTop: 1 }}>{person.role}</div>
+                <div style={{ fontSize: 9, color: '#475569', marginTop: 1 }}>{person.role}</div>
               </div>
 
               {/* Skill cells */}
@@ -380,7 +379,7 @@ export default function MatrixView() {
                           bottom: 'calc(100% + 4px)',
                           left: '50%',
                           transform: 'translateX(-50%)',
-                          background: 'rgba(8,6,20,0.98)',
+                          background: 'rgba(4,10,22,0.98)',
                           border: `1px solid ${CELL_STYLE[proficiency].border}`,
                           borderRadius: 6,
                           padding: '5px 9px',
@@ -418,13 +417,13 @@ export default function MatrixView() {
                 <div style={{ display: 'flex', height: 6, borderRadius: 3, overflow: 'hidden', width: 56, background: 'rgba(255,255,255,0.04)' }}>
                   {stats && stats.total > 0 && (
                     <>
-                      <div style={{ flex: stats.expert, background: '#10b981' }} />
-                      <div style={{ flex: stats.familiar, background: '#f59e0b' }} />
-                      <div style={{ flex: stats.learning, background: '#ef4444' }} />
+                      <div style={{ flex: stats.expert, background: '#0ea5e9' }} />
+                      <div style={{ flex: stats.familiar, background: '#3b82f6' }} />
+                      <div style={{ flex: stats.learning, background: 'rgba(100,116,139,0.5)' }} />
                     </>
                   )}
                 </div>
-                <div style={{ fontSize: 8, color: '#6b5028' }}>
+                <div style={{ fontSize: 8, color: '#475569' }}>
                   {stats?.total ?? 0} skill{(stats?.total ?? 0) !== 1 ? 's' : ''}
                 </div>
               </div>
@@ -437,7 +436,7 @@ export default function MatrixView() {
           style={{
             height: 1,
             marginLeft: ROW_LABEL_W,
-            background: 'linear-gradient(to right, rgba(234,179,8,0.3), rgba(234,179,8,0.05))',
+            background: 'linear-gradient(to right, rgba(59,130,246,0.2), rgba(59,130,246,0.04))',
             marginTop: 4,
             marginBottom: 6,
           }}
@@ -466,7 +465,7 @@ export default function MatrixView() {
                     {stat?.total ?? 0}
                   </div>
                   {(stat?.expert ?? 0) > 0 && (
-                    <div style={{ fontSize: 7, color: '#6ee7b7' }}>{stat?.expert}★</div>
+                    <div style={{ fontSize: 7, color: '#38bdf8' }}>{stat?.expert} exp</div>
                   )}
                 </div>
               </div>
@@ -475,7 +474,7 @@ export default function MatrixView() {
           <div style={{ width: 72 }} />
         </div>
         <div className="flex pl-0 mt-1" style={{ paddingLeft: ROW_LABEL_W }}>
-          <span style={{ fontSize: 8, color: '#4a3515', letterSpacing: '0.05em', paddingLeft: 6 }}>
+          <span style={{ fontSize: 8, color: '#475569', letterSpacing: '0.05em', paddingLeft: 6 }}>
             PEOPLE PER SKILL
           </span>
         </div>

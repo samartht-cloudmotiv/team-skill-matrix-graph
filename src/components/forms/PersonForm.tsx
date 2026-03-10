@@ -35,20 +35,20 @@ export default function PersonForm({ open, onClose, editPerson }: Props) {
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent
         style={{
-          background: 'rgba(15, 10, 30, 0.98)',
-          border: '1px solid rgba(234, 179, 8, 0.3)',
-          boxShadow: '0 0 40px rgba(234,179,8,0.1)',
+          background: 'rgba(4, 10, 22, 0.98)',
+          border: '1px solid rgba(59, 130, 246, 0.3)',
+          boxShadow: '0 0 40px rgba(59,130,246,0.08)',
           backdropFilter: 'blur(20px)',
         }}
       >
         <DialogHeader>
-          <DialogTitle style={{ color: '#fbbf24' }}>
-            {editPerson ? '✏️ Edit Hero' : '⚔️ Add Hero'}
+          <DialogTitle style={{ color: '#60a5fa' }}>
+            {editPerson ? 'Edit Member' : 'Add Member'}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-2">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium" style={{ color: '#a07030' }}>Name *</label>
+            <label className="text-xs font-medium" style={{ color: '#64748b' }}>Name *</label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -57,21 +57,21 @@ export default function PersonForm({ open, onClose, editPerson }: Props) {
               autoFocus
               style={{
                 background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(234,179,8,0.3)',
-                color: '#e2c87a',
+                border: '1px solid rgba(59,130,246,0.3)',
+                color: '#e2e8f0',
               }}
             />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs font-medium" style={{ color: '#a07030' }}>Role</label>
+            <label className="text-xs font-medium" style={{ color: '#64748b' }}>Role</label>
             <Input
               value={role}
               onChange={(e) => setRole(e.target.value)}
               placeholder="e.g. Frontend Engineer"
               style={{
                 background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(234,179,8,0.2)',
-                color: '#e2c87a',
+                border: '1px solid rgba(59,130,246,0.2)',
+                color: '#e2e8f0',
               }}
             />
           </div>
@@ -82,12 +82,12 @@ export default function PersonForm({ open, onClose, editPerson }: Props) {
             <Button
               type="submit"
               style={{
-                background: 'linear-gradient(135deg, #92400e, #78350f)',
-                border: '1px solid #d97706',
-                color: '#fbbf24',
+                background: 'linear-gradient(135deg, #1d4ed8, #1e3a8a)',
+                border: '1px solid rgba(59,130,246,0.5)',
+                color: '#e0f2fe',
               }}
             >
-              {editPerson ? 'Save Changes' : 'Add Hero'}
+              {editPerson ? 'Save Changes' : 'Add Member'}
             </Button>
           </DialogFooter>
         </form>

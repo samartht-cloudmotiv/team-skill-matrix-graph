@@ -154,25 +154,25 @@ function GraphCanvasInner() {
           variant={BackgroundVariant.Dots}
           gap={36}
           size={1}
-          color="rgba(234, 179, 8, 0.05)"
+          color="rgba(59, 130, 246, 0.04)"
           style={{ background: 'transparent' }}
         />
         <Controls
           style={{
-            background: 'rgba(10, 7, 25, 0.88)',
-            border: '1px solid rgba(234, 179, 8, 0.18)',
+            background: 'rgba(4, 10, 22, 0.88)',
+            border: '1px solid rgba(59, 130, 246, 0.18)',
             borderRadius: 10,
             boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
           }}
         />
         <MiniMap
           style={{
-            background: 'rgba(10, 7, 25, 0.88)',
-            border: '1px solid rgba(234, 179, 8, 0.18)',
+            background: 'rgba(4, 10, 22, 0.88)',
+            border: '1px solid rgba(59, 130, 246, 0.18)',
             borderRadius: 10,
             boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
           }}
-          nodeColor={(node) => (node.type === 'person' ? '#d97706' : '#10b981')}
+          nodeColor={(node) => (node.type === 'person' ? '#3b82f6' : '#0d9488')}
           maskColor="rgba(0,0,0,0.6)"
         />
 
@@ -183,19 +183,19 @@ function GraphCanvasInner() {
             title="Reset layout"
             className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-all"
             style={{
-              background: 'rgba(10, 7, 25, 0.88)',
-              border: '1px solid rgba(234,179,8,0.2)',
-              color: '#a07030',
+              background: 'rgba(4, 10, 22, 0.88)',
+              border: '1px solid rgba(59,130,246,0.2)',
+              color: '#64748b',
               cursor: 'pointer',
               marginTop: 8,
             }}
             onMouseEnter={(e) => {
-              (e.target as HTMLElement).style.borderColor = 'rgba(234,179,8,0.5)';
-              (e.target as HTMLElement).style.color = '#fbbf24';
+              (e.target as HTMLElement).style.borderColor = 'rgba(59,130,246,0.5)';
+              (e.target as HTMLElement).style.color = '#60a5fa';
             }}
             onMouseLeave={(e) => {
-              (e.target as HTMLElement).style.borderColor = 'rgba(234,179,8,0.2)';
-              (e.target as HTMLElement).style.color = '#a07030';
+              (e.target as HTMLElement).style.borderColor = 'rgba(59,130,246,0.2)';
+              (e.target as HTMLElement).style.color = '#64748b';
             }}
           >
             <LayoutGrid size={12} />

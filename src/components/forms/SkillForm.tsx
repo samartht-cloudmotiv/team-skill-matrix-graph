@@ -44,7 +44,7 @@ export default function SkillForm({ open, onClose, editSkill }: Props) {
       >
         <DialogHeader>
           <DialogTitle style={{ color: '#10b981' }}>
-            {editSkill ? '✏️ Edit Skill' : '🔷 Add Skill'}
+            {editSkill ? 'Edit Skill' : 'Add Skill'}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-2">

@@ -46,7 +46,7 @@ export default function DetailPanel() {
               className="text-xs font-bold uppercase tracking-widest"
               style={{ color: selectedNodeType === 'person' ? '#60a5fa' : '#2dd4bf' }}
             >
-              {selectedNodeType === 'person' ? '⚔ Hero Profile' : '🔷 Ability Details'}
+              {selectedNodeType === 'person' ? 'Member Profile' : 'Skill Details'}
             </span>
             <button
               onClick={() => setSelectedNode(null, null)}

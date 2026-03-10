@@ -11,7 +11,7 @@ import PersonForm from '@/components/forms/PersonForm';
 import ConnectionForm from '@/components/forms/ConnectionForm';
 import ConfirmDialog from '@/components/forms/ConfirmDialog';
 
-function XpBar({ proficiency }: { proficiency: Proficiency }) {
+function ProficiencyBar({ proficiency }: { proficiency: Proficiency }) {
   const levels: Proficiency[] = ['learning', 'familiar', 'expert'];
   const idx = levels.indexOf(proficiency);
   return (
@@ -156,7 +156,7 @@ export default function PersonDetail({ personId }: { personId: string }) {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-semibold truncate" style={{ color: '#cbd5e1' }}>{skill.name}</div>
-                <XpBar proficiency={conn.proficiency} />
+                <ProficiencyBar proficiency={conn.proficiency} />
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); deleteConnection(conn.id); }}

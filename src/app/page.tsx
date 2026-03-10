@@ -5,7 +5,6 @@ import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from
 import { useStore } from '@/lib/store';
 import { useSeedData } from '@/hooks/useSeedData';
 import GraphCanvas from '@/components/graph/GraphCanvas';
-import ParticleBackground from '@/components/graph/ParticleBackground';
 import DetailPanel from '@/components/panels/DetailPanel';
 import SummaryPanel from '@/components/panels/SummaryPanel';
 import Header from '@/components/layout/Header';
@@ -72,9 +71,6 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Animated particle background — always visible */}
-      <ParticleBackground mouseX={activeView === 'graph' ? springX : undefined} mouseY={activeView === 'graph' ? springY : undefined} />
-
       {/* Header */}
       <Header
         onToggleSummary={() => setSummaryOpen((v) => !v)}
