@@ -5,6 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-cinzel: var(--font-cinzel);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -152,9 +153,12 @@
 .react-flow__node > div {
   overflow: visible !important;
 }
-/* Ensure edges SVG layer is above node backgrounds but below tooltips */
+/* Edges render BELOW nodes so lines don't visually cut through node cards */
 .react-flow__edges {
-  z-index: 2;
+  z-index: 0 !important;
+}
+.react-flow__nodes {
+  z-index: 1 !important;
 }
 .react-flow__controls {
   bottom: 80px !important; /* move up so it doesn't overlap legend */

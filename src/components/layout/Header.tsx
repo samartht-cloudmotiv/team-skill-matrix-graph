@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Users, Layers, Zap, BarChart3 } from 'lucide-react';
+import { Plus, Users, Layers, Zap, BarChart3, Share2, Grid3x3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Popover, PopoverContent, PopoverTrigger,
@@ -14,9 +14,11 @@ import { useStore } from '@/lib/store';
 interface Props {
   onToggleSummary: () => void;
   summaryOpen: boolean;
+  activeView: 'graph' | 'matrix';
+  onViewChange: (view: 'graph' | 'matrix') => void;
 }
 
-export default function Header({ onToggleSummary, summaryOpen }: Props) {
+export default function Header({ onToggleSummary, summaryOpen, activeView, onViewChange }: Props) {
   const [addOpen, setAddOpen] = useState(false);
   const [personFormOpen, setPersonFormOpen] = useState(false);
   const [skillFormOpen, setSkillFormOpen] = useState(false);
@@ -49,7 +51,7 @@ export default function Header({ onToggleSummary, summaryOpen }: Props) {
             <span style={{ fontSize: 16 }}>⚔️</span>
             <span
               className="font-bold text-sm tracking-wider"
-              style={{ color: '#fbbf24', fontFamily: 'serif' }}
+              style={{ color: '#fbbf24', fontFamily: 'var(--font-cinzel), serif' }}
             >
               SKILL MATRIX
             </span>
@@ -74,6 +76,29 @@ export default function Header({ onToggleSummary, summaryOpen }: Props) {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          {/* View toggle */}
+          <div
+            className="flex items-center rounded-lg overflow-hidden"
+            style={{ border: '1px solid rgba(234,179,8,0.18)', background: 'rgba(10,8,22,0.7)' }}
+          >
+            {(['graph', 'matrix'] as const).map((view) => (
+              <button
+                key={view}
+                onClick={() => onViewChange(view)}
+                className="flex items-center gap-1.5 text-xs h-7 px-2.5 transition-all"
+                style={{
+                  color: activeView === view ? '#fbbf24' : '#6b5028',
+                  background: activeView === view ? 'rgba(234,179,8,0.15)' : 'transparent',
+                  borderRight: view === 'graph' ? '1px solid rgba(234,179,8,0.12)' : 'none',
+                  cursor: 'pointer',
+                }}
+              >
+                {view === 'graph' ? <Share2 size={11} /> : <Grid3x3 size={11} />}
+                <span className="capitalize">{view}</span>
+              </button>
+            ))}
+          </div>
+
           <Button
             size="sm"
             variant="ghost"

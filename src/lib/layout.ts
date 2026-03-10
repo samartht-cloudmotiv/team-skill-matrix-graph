@@ -45,23 +45,24 @@ export function computeLayout(
       'link',
       forceLink<SimNode, SimLink>(simLinks)
         .id((d) => d.id)
-        .distance(260)   // more breathing room between connected nodes
-        .strength(0.5)
+        .distance(300)   // larger distance keeps nodes well separated
+        .strength(0.4)
     )
     .force(
       'charge',
-      forceManyBody().strength((d) => ((d as SimNode).type === 'person' ? -900 : -500))
+      forceManyBody().strength((d) => ((d as SimNode).type === 'person' ? -1400 : -700))
     )
     .force('center', forceCenter(width / 2, height / 2))
     .force(
       'collide',
       forceCollide()
-        .radius((d) => ((d as SimNode).type === 'person' ? 100 : 80))
+        .radius((d) => ((d as SimNode).type === 'person' ? 130 : 105))
         .strength(1)
+        .iterations(4)
     )
     .stop();
 
-  for (let i = 0; i < 500; i++) simulation.tick();
+  for (let i = 0; i < 600; i++) simulation.tick();
 
   const positions = new Map<string, { x: number; y: number }>();
   simNodes.forEach((n) => {

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { useStore } from '@/lib/store';
 import { useSeedData } from '@/hooks/useSeedData';
 import GraphCanvas from '@/components/graph/GraphCanvas';
@@ -10,12 +10,14 @@ import DetailPanel from '@/components/panels/DetailPanel';
 import SummaryPanel from '@/components/panels/SummaryPanel';
 import Header from '@/components/layout/Header';
 import Legend from '@/components/layout/Legend';
+import MatrixView from '@/components/views/MatrixView';
 
 export default function Home() {
   const [hydrated, setHydrated] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
+  const [activeView, setActiveView] = useState<'graph' | 'matrix'>('graph');
 
-  // Subtle 3D tilt effect tracking mouse position
+  // Subtle 3D tilt effect tracking mouse position (graph view only)
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const springX = useSpring(mouseX, { stiffness: 40, damping: 20 });
@@ -24,6 +26,7 @@ export default function Home() {
   const rotateY = useTransform(springX, [-1, 1], [-1.5, 1.5]);
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (activeView !== 'graph') return;
     const { clientX, clientY, currentTarget } = e;
     const { width, height } = (currentTarget as HTMLElement).getBoundingClientRect();
     mouseX.set((clientX / width - 0.5) * 2);
@@ -53,7 +56,10 @@ export default function Home() {
           <div className="text-4xl animate-pulse" style={{ filter: 'drop-shadow(0 0 20px rgba(234,179,8,0.5))' }}>
             ⚔️
           </div>
-          <div className="text-sm tracking-widest" style={{ color: '#6b5028' }}>
+          <div
+            className="text-sm tracking-widest"
+            style={{ color: '#6b5028', fontFamily: 'var(--font-cinzel), serif' }}
+          >
             Loading Skill Matrix...
           </div>
         </div>
@@ -68,34 +74,67 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Animated particle background — parallax layer */}
-      <ParticleBackground mouseX={springX} mouseY={springY} />
+      {/* Animated particle background — always visible */}
+      <ParticleBackground mouseX={activeView === 'graph' ? springX : undefined} mouseY={activeView === 'graph' ? springY : undefined} />
 
-      {/* Header — above everything, always interactive */}
-      <Header onToggleSummary={() => setSummaryOpen((v) => !v)} summaryOpen={summaryOpen} />
+      {/* Header */}
+      <Header
+        onToggleSummary={() => setSummaryOpen((v) => !v)}
+        summaryOpen={summaryOpen}
+        activeView={activeView}
+        onViewChange={(v) => {
+          setActiveView(v);
+          setSummaryOpen(false);
+        }}
+      />
 
       {/* Summary panel dropdown */}
       <SummaryPanel open={summaryOpen} onClose={() => setSummaryOpen(false)} />
 
-      {/* Graph canvas with subtle 3D tilt */}
-      <motion.div
-        className="absolute inset-0 pt-12"
-        style={{
-          zIndex: 1,
-          rotateX,
-          rotateY,
-          perspective: 1200,
-          transformStyle: 'preserve-3d',
-        }}
-      >
-        <GraphCanvas />
-      </motion.div>
+      <AnimatePresence mode="wait">
+        {activeView === 'graph' ? (
+          <motion.div
+            key="graph"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="absolute inset-0"
+            style={{ zIndex: 1 }}
+          >
+            {/* Graph canvas with subtle 3D tilt */}
+            <motion.div
+              className="absolute inset-0 pt-12"
+              style={{
+                rotateX,
+                rotateY,
+                perspective: 1200,
+                transformStyle: 'preserve-3d',
+              }}
+            >
+              <GraphCanvas />
+            </motion.div>
 
-      {/* Detail panel — positioned to the right, no full-screen wrapper blocking clicks */}
-      <DetailPanel />
+            {/* Detail panel */}
+            <DetailPanel />
 
-      {/* Legend */}
-      <Legend />
+            {/* Legend */}
+            <Legend />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="matrix"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0"
+            style={{ zIndex: 1 }}
+          >
+            <MatrixView />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
