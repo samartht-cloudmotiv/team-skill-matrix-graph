@@ -19,34 +19,34 @@ interface Props {
   mouseY?: MotionValue<number>;
 }
 
-// Per-layer parallax multipliers (how far each layer shifts relative to mouse)
-const LAYER_PARALLAX = { 1: 8, 2: 22, 3: 48, 4: 80 };
-// Per-layer colors [r, g, b]
+// Per-layer parallax multipliers
+const LAYER_PARALLAX = { 1: 6, 2: 16, 3: 32, 4: 55 };
+// Per-layer colors — professional cold blue/slate palette
 const LAYER_COLOR: Record<number, [number, number, number]> = {
-  1: [120, 90, 200],  // far: cool purple-blue
-  2: [160, 110, 240], // mid: soft violet
-  3: [220, 150, 40],  // close: warm amber
-  4: [255, 220, 80],  // foreground: bright gold
+  1: [40,  70,  120],  // far: deep navy
+  2: [55,  90,  160],  // mid: slate blue
+  3: [80,  130, 210],  // close: steel blue
+  4: [120, 170, 240],  // foreground: light blue
 };
 // Per-layer size ranges [min, range]
 const LAYER_SIZE: Record<number, [number, number]> = {
-  1: [0.3, 0.5],
-  2: [0.6, 0.7],
-  3: [1.0, 1.2],
-  4: [1.8, 1.4],
+  1: [0.25, 0.4],
+  2: [0.45, 0.55],
+  3: [0.75, 0.9],
+  4: [1.2, 1.0],
 };
-// Per-layer opacity ranges [max]
-const LAYER_OPACITY_MAX: Record<number, number> = { 1: 0.35, 2: 0.45, 3: 0.55, 4: 0.75 };
-// Per-layer count weight
-const LAYER_WEIGHT = { 1: 5, 2: 3, 3: 1.5, 4: 0.4 };
+// Per-layer opacity — subtle enterprise level
+const LAYER_OPACITY_MAX: Record<number, number> = { 1: 0.18, 2: 0.24, 3: 0.3, 4: 0.4 };
+// Per-layer count weight — sparser than before
+const LAYER_WEIGHT = { 1: 4, 2: 2.5, 3: 1.2, 4: 0.3 };
 
-// Nebula blobs config
+// Subtle depth gradient blobs (very faint — professional atmosphere only)
 const NEBULAE = [
-  { cx: 0.15, cy: 0.2,  r: 0.38, color: '80, 20, 160',  opacity: 0.055, parallax: 0.3 },
-  { cx: 0.78, cy: 0.65, r: 0.42, color: '160, 60, 10',  opacity: 0.04,  parallax: 0.2 },
-  { cx: 0.5,  cy: 0.85, r: 0.3,  color: '20, 60, 160',  opacity: 0.04,  parallax: 0.35 },
-  { cx: 0.85, cy: 0.15, r: 0.28, color: '100, 20, 180', opacity: 0.035, parallax: 0.15 },
-  { cx: 0.25, cy: 0.75, r: 0.25, color: '200, 80, 20',  opacity: 0.03,  parallax: 0.4  },
+  { cx: 0.15, cy: 0.2,  r: 0.4,  color: '20, 50, 120',  opacity: 0.022, parallax: 0.25 },
+  { cx: 0.82, cy: 0.7,  r: 0.45, color: '15, 40, 100',  opacity: 0.018, parallax: 0.18 },
+  { cx: 0.5,  cy: 0.88, r: 0.32, color: '10, 35, 90',   opacity: 0.016, parallax: 0.3  },
+  { cx: 0.88, cy: 0.12, r: 0.3,  color: '25, 55, 110',  opacity: 0.014, parallax: 0.12 },
+  { cx: 0.22, cy: 0.78, r: 0.28, color: '18, 45, 105',  opacity: 0.014, parallax: 0.35 },
 ];
 
 export default function ParticleBackground({ mouseX, mouseY }: Props) {

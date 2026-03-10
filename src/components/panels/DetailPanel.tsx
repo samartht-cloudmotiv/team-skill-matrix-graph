@@ -25,10 +25,10 @@ export default function DetailPanel() {
             right: 0,
             bottom: 0,
             width: 360,
-            background: 'rgba(8, 6, 20, 0.95)',
+            background: 'rgba(4, 10, 22, 0.96)',
             backdropFilter: 'blur(20px)',
-            borderLeft: '1px solid rgba(234, 179, 8, 0.22)',
-            boxShadow: '-12px 0 40px rgba(0,0,0,0.7)',
+            borderLeft: '1px solid rgba(59, 130, 246, 0.15)',
+            boxShadow: '-8px 0 32px rgba(0,0,0,0.6)',
             zIndex: 20,
             display: 'flex',
             flexDirection: 'column',
@@ -38,13 +38,13 @@ export default function DetailPanel() {
           <div
             className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{
-              borderBottom: '1px solid rgba(255,255,255,0.07)',
-              background: 'rgba(255,255,255,0.025)',
+              borderBottom: '1px solid rgba(255,255,255,0.05)',
+              background: 'rgba(255,255,255,0.02)',
             }}
           >
             <span
               className="text-xs font-bold uppercase tracking-widest"
-              style={{ color: selectedNodeType === 'person' ? '#d97706' : '#10b981' }}
+              style={{ color: selectedNodeType === 'person' ? '#60a5fa' : '#2dd4bf' }}
             >
               {selectedNodeType === 'person' ? '⚔ Hero Profile' : '🔷 Ability Details'}
             </span>

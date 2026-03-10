@@ -53,14 +53,12 @@ export default function Home() {
         style={{ background: 'radial-gradient(ellipse at center, #1a0a2e 0%, #080612 100%)' }}
       >
         <div className="flex flex-col items-center gap-4">
-          <div className="text-4xl animate-pulse" style={{ filter: 'drop-shadow(0 0 20px rgba(234,179,8,0.5))' }}>
-            ⚔️
-          </div>
           <div
-            className="text-sm tracking-widest"
-            style={{ color: '#6b5028', fontFamily: 'var(--font-cinzel), serif' }}
-          >
-            Loading Skill Matrix...
+            className="animate-pulse"
+            style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(59,130,246,0.2)', border: '1px solid rgba(59,130,246,0.4)' }}
+          />
+          <div className="text-sm tracking-widest" style={{ color: '#334155', letterSpacing: '0.12em' }}>
+            Loading...
           </div>
         </div>
       </div>
@@ -70,7 +68,7 @@ export default function Home() {
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
-      style={{ background: 'radial-gradient(ellipse at 20% 20%, #1a0a2e 0%, #0f0a1a 40%, #080612 100%)' }}
+      style={{ background: 'radial-gradient(ellipse at 25% 25%, #0a1628 0%, #060e1c 45%, #030810 100%)' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >

@@ -8,22 +8,22 @@ import { Proficiency, SkillCategory } from '@/lib/types';
 
 const CELL_STYLE: Record<Proficiency, { bg: string; text: string; border: string; glow: string }> = {
   learning: {
-    bg: 'rgba(239,68,68,0.18)',
-    text: '#fca5a5',
-    border: 'rgba(239,68,68,0.45)',
-    glow: 'rgba(239,68,68,0.3)',
+    bg: 'rgba(100,116,139,0.14)',
+    text: '#94a3b8',
+    border: 'rgba(100,116,139,0.35)',
+    glow: 'rgba(100,116,139,0.2)',
   },
   familiar: {
-    bg: 'rgba(245,158,11,0.22)',
-    text: '#fcd34d',
-    border: 'rgba(245,158,11,0.5)',
-    glow: 'rgba(245,158,11,0.3)',
+    bg: 'rgba(59,130,246,0.15)',
+    text: '#60a5fa',
+    border: 'rgba(59,130,246,0.4)',
+    glow: 'rgba(59,130,246,0.2)',
   },
   expert: {
-    bg: 'rgba(16,185,129,0.22)',
-    text: '#6ee7b7',
-    border: 'rgba(16,185,129,0.55)',
-    glow: 'rgba(16,185,129,0.35)',
+    bg: 'rgba(14,165,233,0.16)',
+    text: '#38bdf8',
+    border: 'rgba(14,165,233,0.45)',
+    glow: 'rgba(14,165,233,0.22)',
   },
 };
 
@@ -122,8 +122,8 @@ export default function MatrixView() {
       {/* Title */}
       <div className="mb-5 flex items-center gap-3">
         <div
-          className="text-base font-bold tracking-widest uppercase"
-          style={{ color: '#fbbf24', fontFamily: 'var(--font-cinzel), serif' }}
+          className="text-base font-semibold tracking-widest uppercase"
+          style={{ color: '#e2e8f0', letterSpacing: '0.1em' }}
         >
           Skill Matrix
         </div>
@@ -137,7 +137,7 @@ export default function MatrixView() {
       <div className="flex items-center gap-5 mb-4 flex-wrap">
         <span
           className="text-xs font-semibold tracking-widest uppercase"
-          style={{ color: '#6b5028', fontFamily: 'var(--font-cinzel), serif', minWidth: 80 }}
+          style={{ color: '#334155', minWidth: 80 }}
         >
           Legend
         </span>

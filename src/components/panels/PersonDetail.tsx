@@ -24,7 +24,7 @@ function XpBar({ proficiency }: { proficiency: Proficiency }) {
             background: i <= idx
               ? `linear-gradient(90deg, ${PROFICIENCY_CONFIG[proficiency].edgeColor}, ${PROFICIENCY_CONFIG[proficiency].edgeColor}88)`
               : 'rgba(255,255,255,0.08)',
-            boxShadow: i <= idx ? `0 0 6px ${PROFICIENCY_CONFIG[proficiency].edgeColor}66` : 'none',
+            boxShadow: 'none',
           }}
         />
       ))}
@@ -65,8 +65,8 @@ export default function PersonDetail({ personId }: { personId: string }) {
       <div
         className="p-4 pb-3"
         style={{
-          background: 'linear-gradient(135deg, rgba(120, 53, 15, 0.4) 0%, rgba(30, 15, 5, 0.6) 100%)',
-          borderBottom: '1px solid rgba(234, 179, 8, 0.2)',
+          background: 'linear-gradient(135deg, rgba(30, 58, 138, 0.22) 0%, rgba(7, 16, 32, 0.5) 100%)',
+          borderBottom: '1px solid rgba(59, 130, 246, 0.13)',
         }}
       >
         <div className="flex items-start gap-3">
@@ -76,25 +76,25 @@ export default function PersonDetail({ personId }: { personId: string }) {
             style={{
               width: 56,
               height: 56,
-              background: 'linear-gradient(135deg, #78350f 0%, #451a03 100%)',
-              border: '2px solid #92400e',
-              boxShadow: '0 0 16px rgba(234,179,8,0.3)',
-              fontSize: 20,
+              background: 'linear-gradient(135deg, #1e3a5f 0%, #0f1f3d 100%)',
+              border: '2px solid #3b82f6',
+              boxShadow: '0 0 12px rgba(59,130,246,0.18)',
+              fontSize: 18,
               fontWeight: 700,
-              color: '#fbbf24',
-              fontFamily: 'serif',
+              color: '#93c5fd',
+              fontFamily: 'var(--font-geist-sans), system-ui',
             }}
           >
             {person.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)}
           </div>
 
           <div className="flex-1 min-w-0">
-            <div className="text-base font-bold truncate" style={{ color: '#fbbf24' }}>{person.name}</div>
-            <div className="text-xs mt-0.5" style={{ color: '#a07030' }}>{person.role}</div>
+            <div className="text-base font-bold truncate" style={{ color: '#e2e8f0' }}>{person.name}</div>
+            <div className="text-xs mt-0.5" style={{ color: '#475569' }}>{person.role}</div>
             <div className="flex gap-2 mt-1.5 flex-wrap">
-              {expertCount > 0 && <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(234,179,8,0.15)', color: '#eab308', border: '1px solid rgba(234,179,8,0.3)' }}>★★★ {expertCount} Expert</span>}
-              {familiarCount > 0 && <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(245,158,11,0.15)', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.3)' }}>★★ {familiarCount} Familiar</span>}
-              {learningCount > 0 && <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(251,191,36,0.1)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.2)' }}>★ {learningCount} Learning</span>}
+              {expertCount > 0 && <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(14,165,233,0.12)', color: '#38bdf8', border: '1px solid rgba(14,165,233,0.25)' }}>{expertCount} Expert</span>}
+              {familiarCount > 0 && <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(59,130,246,0.12)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.25)' }}>{familiarCount} Familiar</span>}
+              {learningCount > 0 && <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'rgba(100,116,139,0.1)', color: '#94a3b8', border: '1px solid rgba(100,116,139,0.2)' }}>{learningCount} Learning</span>}
             </div>
           </div>
 
@@ -112,23 +112,22 @@ export default function PersonDetail({ personId }: { personId: string }) {
       {/* Skills list */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#a07030' }}>
+          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#334155' }}>
             Skills ({connectedSkills.length})
           </span>
           <Button
             size="sm"
             variant="ghost"
             onClick={() => setConnectOpen(true)}
-            className="h-6 text-xs gap-1 hover:bg-amber-950 px-2"
-            style={{ color: '#fbbf24', border: '1px solid rgba(234,179,8,0.3)' }}
+            className="h-6 text-xs gap-1 px-2"
+            style={{ color: '#60a5fa', border: '1px solid rgba(59,130,246,0.28)' }}
           >
             <Plus size={11} /> Link Skill
           </Button>
         </div>
 
         {connectedSkills.length === 0 && (
-          <div className="text-center py-8" style={{ color: '#6b5028' }}>
-            <div className="text-2xl mb-2">⚔️</div>
+          <div className="text-center py-8" style={{ color: '#334155' }}>
             <div className="text-xs">No skills linked yet</div>
           </div>
         )}
@@ -156,7 +155,7 @@ export default function PersonDetail({ personId }: { personId: string }) {
                 {skill.category}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-xs font-semibold truncate" style={{ color: '#e2c87a' }}>{skill.name}</div>
+                <div className="text-xs font-semibold truncate" style={{ color: '#cbd5e1' }}>{skill.name}</div>
                 <XpBar proficiency={conn.proficiency} />
               </div>
               <button

@@ -4,36 +4,36 @@ import { memo, useState } from 'react';
 import { NodeProps, Handle, Position } from '@xyflow/react';
 import { motion } from 'framer-motion';
 import {
-  Code2, Database, Server, Palette, Layers, GitBranch,
-  Container, Workflow, Globe, Figma, Braces,
+  Code2, Database, Server, Palette, Layers,
+  Container, Workflow, Globe, Figma, Braces, GitBranch,
 } from 'lucide-react';
 import { SkillNodeData, SkillCategory } from '@/lib/types';
 import { CATEGORY_COLORS } from '@/lib/constants';
 
 const CATEGORY_ICONS: Record<SkillCategory, React.ReactNode> = {
-  Frontend: <Code2 size={24} />,
-  Backend: <Server size={24} />,
-  DevOps: <Container size={24} />,
-  Design: <Figma size={24} />,
-  Data: <Database size={24} />,
-  Other: <Layers size={24} />,
+  Frontend: <Code2 size={22} />,
+  Backend: <Server size={22} />,
+  DevOps: <Container size={22} />,
+  Design: <Figma size={22} />,
+  Data: <Database size={22} />,
+  Other: <Layers size={22} />,
 };
 
 const SKILL_ICONS: Record<string, React.ReactNode> = {
-  React: <Braces size={22} />,
-  'Next.js': <Globe size={22} />,
-  TypeScript: <Code2 size={22} />,
-  'Node.js': <Server size={22} />,
-  PostgreSQL: <Database size={22} />,
-  Docker: <Container size={22} />,
-  Figma: <Figma size={22} />,
-  CSS: <Palette size={22} />,
-  GraphQL: <GitBranch size={22} />,
-  'CI/CD': <Workflow size={22} />,
+  React: <Braces size={20} />,
+  'Next.js': <Globe size={20} />,
+  TypeScript: <Code2 size={20} />,
+  'Node.js': <Server size={20} />,
+  PostgreSQL: <Database size={20} />,
+  Docker: <Container size={20} />,
+  Figma: <Figma size={20} />,
+  CSS: <Palette size={20} />,
+  GraphQL: <GitBranch size={20} />,
+  'CI/CD': <Workflow size={20} />,
 };
 
 const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)';
-const HEX_SIZE = { w: 84, h: 76 };
+const HEX_SIZE = { w: 82, h: 74 };
 
 function SkillNode({ data }: NodeProps) {
   const { name, category, isSelected, isDimmed, expertCount, totalCount } = data as unknown as SkillNodeData;
@@ -45,183 +45,84 @@ function SkillNode({ data }: NodeProps) {
   return (
     <motion.div
       initial={{ scale: 0, opacity: 0 }}
-      animate={{
-        scale: 1,
-        opacity: isDimmed ? 0.12 : 1,
-        filter: isDimmed ? 'grayscale(1) brightness(0.3)' : 'none',
-      }}
+      animate={{ scale: 1, opacity: isDimmed ? 0.12 : 1, filter: isDimmed ? 'grayscale(1) brightness(0.3)' : 'none' }}
       exit={{ scale: 0, opacity: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       className="relative flex flex-col items-center"
-      style={{ width: 96, cursor: 'pointer' }}
+      style={{ width: 94, cursor: 'pointer' }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Outer bloom glow */}
-      <motion.div
-        className="absolute"
-        animate={{ opacity: active ? 0.9 : 0.2, scale: active ? 1.35 : 1.1 }}
-        transition={{ duration: 0.25 }}
-        style={{
-          width: HEX_SIZE.w,
-          height: HEX_SIZE.h,
-          clipPath: HEX_CLIP,
-          background: colors.border,
-          filter: 'blur(14px)',
-          pointerEvents: 'none',
-          top: 0,
-        }}
-      />
-
-      {/* Pulsing ring for selected */}
-      {isSelected && (
+      {/* Subtle bloom — reduced compared to RPG version */}
+      {active && (
         <motion.div
           className="absolute"
-          animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
-          transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
-          style={{
-            width: HEX_SIZE.w,
-            height: HEX_SIZE.h,
-            clipPath: HEX_CLIP,
-            background: 'transparent',
-            border: `2px solid ${colors.border}`,
-            pointerEvents: 'none',
-            top: 0,
-          }}
+          animate={{ opacity: 0.5, scale: 1.2 }}
+          style={{ width: HEX_SIZE.w, height: HEX_SIZE.h, clipPath: HEX_CLIP, background: colors.border, filter: 'blur(12px)', pointerEvents: 'none', top: 0 }}
         />
       )}
 
-      {/* Hex body */}
+      {isSelected && (
+        <motion.div
+          className="absolute"
+          animate={{ scale: [1, 1.35, 1], opacity: [0.5, 0, 0.5] }}
+          transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
+          style={{ width: HEX_SIZE.w, height: HEX_SIZE.h, clipPath: HEX_CLIP, border: `1.5px solid ${colors.border}`, pointerEvents: 'none', top: 0, background: 'transparent' }}
+        />
+      )}
+
       <motion.div
-        animate={{ y: hovered ? -3 : 0, scale: hovered ? 1.07 : 1 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+        animate={{ y: hovered ? -3 : 0, scale: hovered ? 1.06 : 1 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 22 }}
         className="relative flex items-center justify-center"
         style={{
-          width: HEX_SIZE.w,
-          height: HEX_SIZE.h,
-          clipPath: HEX_CLIP,
+          width: HEX_SIZE.w, height: HEX_SIZE.h, clipPath: HEX_CLIP,
           background: active
-            ? `linear-gradient(145deg, ${colors.border}60 0%, ${colors.border}25 100%)`
-            : `linear-gradient(145deg, ${colors.border}35 0%, ${colors.border}10 100%)`,
+            ? `linear-gradient(145deg, ${colors.border}50 0%, ${colors.border}20 100%)`
+            : `linear-gradient(145deg, ${colors.border}28 0%, ${colors.border}0a 100%)`,
         }}
       >
-        {/* Inner shine */}
-        <div
-          className="absolute inset-0"
-          style={{
-            clipPath: HEX_CLIP,
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 55%)',
-            pointerEvents: 'none',
-          }}
-        />
-
-        {/* Hex border ring */}
-        <div
-          className="absolute inset-0"
-          style={{
-            clipPath: HEX_CLIP,
-            border: `2px solid ${active ? colors.border : colors.border + '88'}`,
-            boxShadow: active ? `inset 0 0 20px ${colors.border}40` : 'none',
-          }}
-        />
-
-        {/* Icon */}
+        <div className="absolute inset-0" style={{ clipPath: HEX_CLIP, background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%)', pointerEvents: 'none' }} />
+        <div className="absolute inset-0" style={{ clipPath: HEX_CLIP, border: `1.5px solid ${active ? colors.border : colors.border + '55'}` }} />
         <motion.div
-          animate={{ scale: active ? 1.1 : 1 }}
+          animate={{ scale: active ? 1.08 : 1 }}
           transition={{ duration: 0.2 }}
-          style={{
-            color: active ? colors.border : `${colors.border}cc`,
-            filter: active ? `drop-shadow(0 0 8px ${colors.border})` : `drop-shadow(0 0 3px ${colors.border}66)`,
-            position: 'relative',
-            zIndex: 2,
-          }}
+          style={{ color: active ? colors.border : `${colors.border}bb`, position: 'relative', zIndex: 2 }}
         >
           {icon}
         </motion.div>
       </motion.div>
 
-      {/* Expert count badge */}
+      {/* Expert count badge — clean, no glow */}
       {expertCount > 0 && (
         <div
-          className="absolute flex items-center gap-0.5"
-          style={{ top: -4, right: 0, zIndex: 10 }}
+          className="absolute flex items-center"
+          style={{ top: -3, right: 2, zIndex: 10 }}
         >
-          <div
-            style={{
-              background: 'rgba(5,3,15,0.9)',
-              border: '1px solid rgba(234,179,8,0.5)',
-              borderRadius: 10,
-              padding: '1px 5px',
-              fontSize: 9,
-              color: '#eab308',
-              lineHeight: 1.4,
-              boxShadow: '0 0 8px rgba(234,179,8,0.4)',
-            }}
-          >
-            {'★'.repeat(Math.min(expertCount, 3))}
+          <div style={{ background: 'rgba(3,8,18,0.92)', border: `1px solid ${colors.border}55`, borderRadius: 8, padding: '1px 5px', fontSize: 8, color: colors.border, lineHeight: 1.5 }}>
+            {expertCount} expert
           </div>
         </div>
       )}
 
-      {/* Name label */}
-      <div
-        className="mt-1.5 text-center"
-        style={{
-          background: 'rgba(5,3,15,0.82)',
-          borderRadius: 6,
-          padding: '2px 7px',
-          border: active ? `1px solid ${colors.border}55` : '1px solid rgba(255,255,255,0.06)',
-          maxWidth: 96,
-          backdropFilter: 'blur(4px)',
-        }}
-      >
-        <div
-          style={{
-            fontSize: 11,
-            fontWeight: 600,
-            color: active ? colors.border : `${colors.border}bb`,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            maxWidth: 86,
-            letterSpacing: '0.02em',
-          }}
-        >
+      <div className="mt-1.5 text-center" style={{ background: 'rgba(3,8,18,0.82)', borderRadius: 5, padding: '2px 6px', border: active ? `1px solid ${colors.border}44` : '1px solid rgba(255,255,255,0.05)', maxWidth: 94, backdropFilter: 'blur(4px)' }}>
+        <div style={{ fontSize: 11, fontWeight: 600, color: active ? colors.border : `${colors.border}aa`, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 84 }}>
           {name}
         </div>
-        <div
-          style={{
-            fontSize: 8,
-            color: active ? `${colors.border}bb` : `${colors.border}55`,
-            marginTop: 1,
-          }}
-        >
+        <div style={{ fontSize: 8, color: `${colors.border}66`, marginTop: 1 }}>
           {category}
         </div>
       </div>
 
-      {/* Hover tooltip */}
       {hovered && !isSelected && (
         <motion.div
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           className="absolute pointer-events-none"
-          style={{
-            bottom: '100%',
-            marginBottom: 6,
-            background: 'rgba(10, 7, 25, 0.96)',
-            border: `1px solid ${colors.border}66`,
-            borderRadius: 8,
-            padding: '6px 10px',
-            whiteSpace: 'nowrap',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.7)',
-            zIndex: 9999,
-          }}
+          style={{ bottom: '100%', marginBottom: 6, background: 'rgba(3,8,18,0.97)', border: `1px solid ${colors.border}44`, borderRadius: 7, padding: '5px 9px', whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.6)', zIndex: 9999 }}
         >
           <div style={{ fontSize: 11, color: colors.border, fontWeight: 600 }}>{name}</div>
-          <div style={{ fontSize: 9, color: '#888', marginTop: 2 }}>
-            {totalCount} people · {expertCount} expert · click to inspect
-          </div>
+          <div style={{ fontSize: 9, color: '#475569', marginTop: 2 }}>{totalCount} members · {expertCount} expert</div>
         </motion.div>
       )}
 

@@ -61,8 +61,8 @@ export default function SkillDetail({ skillId }: { skillId: string }) {
       <div
         className="p-4 pb-3"
         style={{
-          background: `linear-gradient(135deg, ${colors.border}18 0%, rgba(10,8,20,0.6) 100%)`,
-          borderBottom: `1px solid ${colors.border}33`,
+          background: `linear-gradient(135deg, ${colors.border}12 0%, rgba(4, 10, 22, 0.55) 100%)`,
+          borderBottom: `1px solid ${colors.border}25`,
         }}
       >
         <div className="flex items-start gap-3">
@@ -116,19 +116,13 @@ export default function SkillDetail({ skillId }: { skillId: string }) {
         {skillConns.length > 0 && (
           <div className="mt-3 flex rounded-full overflow-hidden h-2 gap-0.5">
             {expertCount > 0 && (
-              <div
-                style={{
-                  flex: expertCount,
-                  background: '#eab308',
-                  boxShadow: '0 0 8px rgba(234,179,8,0.5)',
-                }}
-              />
+              <div style={{ flex: expertCount, background: '#0ea5e9' }} />
             )}
             {familiarCount > 0 && (
-              <div style={{ flex: familiarCount, background: '#f59e0b' }} />
+              <div style={{ flex: familiarCount, background: '#3b82f6' }} />
             )}
             {learningCount > 0 && (
-              <div style={{ flex: learningCount, background: 'rgba(251,191,36,0.4)' }} />
+              <div style={{ flex: learningCount, background: 'rgba(100,116,139,0.45)' }} />
             )}
           </div>
         )}
@@ -137,7 +131,7 @@ export default function SkillDetail({ skillId }: { skillId: string }) {
       {/* People list */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#666' }}>
+          <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#334155' }}>
             Team Members ({connectedPeople.length})
           </span>
           <Button
@@ -152,9 +146,8 @@ export default function SkillDetail({ skillId }: { skillId: string }) {
         </div>
 
         {connectedPeople.length === 0 && (
-          <div className="text-center py-8" style={{ color: '#444' }}>
-            <div className="text-2xl mb-2">🔮</div>
-            <div className="text-xs">No one has this skill yet</div>
+          <div className="text-center py-8" style={{ color: '#334155' }}>
+            <div className="text-xs">No team members have this skill yet</div>
           </div>
         )}
 
@@ -178,16 +171,16 @@ export default function SkillDetail({ skillId }: { skillId: string }) {
                 style={{
                   width: 34,
                   height: 34,
-                  background: 'linear-gradient(135deg, #78350f, #451a03)',
-                  border: '1.5px solid #92400e',
-                  fontSize: 12,
-                  color: '#fbbf24',
+                  background: 'linear-gradient(135deg, #1e3a5f, #0f1f3d)',
+                  border: '1.5px solid rgba(59,130,246,0.4)',
+                  fontSize: 11,
+                  color: '#60a5fa',
                 }}
               >
                 {person.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-xs font-semibold truncate" style={{ color: '#e2c87a' }}>{person.name}</div>
+                <div className="text-xs font-semibold truncate" style={{ color: '#cbd5e1' }}>{person.name}</div>
                 <div className="text-xs truncate" style={{ color: '#666' }}>{person.role}</div>
               </div>
               <ProficiencyBadge proficiency={conn.proficiency} />

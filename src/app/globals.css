@@ -123,7 +123,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    background: radial-gradient(ellipse at 20% 20%, #1a0a2e 0%, #0f0a1a 40%, #080612 100%);
+    /* Professional deep navy — enterprise B2B tone */
+    background: radial-gradient(ellipse at 25% 25%, #0a1628 0%, #060e1c 45%, #030810 100%);
     min-height: 100vh;
     overflow: hidden;
   }
@@ -161,19 +162,19 @@
   z-index: 1 !important;
 }
 .react-flow__controls {
-  bottom: 80px !important; /* move up so it doesn't overlap legend */
+  bottom: 80px !important;
 }
 .react-flow__controls-button {
-  background: rgba(10, 7, 25, 0.9) !important;
-  border-color: rgba(234, 179, 8, 0.18) !important;
-  color: #d97706 !important;
-  fill: #d97706 !important;
+  background: rgba(8, 15, 30, 0.92) !important;
+  border-color: rgba(59, 130, 246, 0.2) !important;
+  color: #60a5fa !important;
+  fill: #60a5fa !important;
   border-radius: 6px !important;
   margin-bottom: 2px !important;
 }
 .react-flow__controls-button:hover {
-  background: rgba(92, 37, 7, 0.5) !important;
-  border-color: rgba(234, 179, 8, 0.5) !important;
+  background: rgba(30, 58, 138, 0.4) !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
 }
 .react-flow__minimap {
   border-radius: 10px !important;
@@ -191,9 +192,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(234, 179, 8, 0.2);
+  background: rgba(59, 130, 246, 0.2);
   border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(234, 179, 8, 0.4);
+  background: rgba(59, 130, 246, 0.4);
 }
