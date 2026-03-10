@@ -74,8 +74,10 @@ export default function Home() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Animated particle background */}
-      <ParticleBackground mouseX={activeView === 'graph' ? springX : undefined} mouseY={activeView === 'graph' ? springY : undefined} />
+      {/* Animated particle background — dark themes only */}
+      {PALETTES[palette].isDark && (
+        <ParticleBackground mouseX={activeView === 'graph' ? springX : undefined} mouseY={activeView === 'graph' ? springY : undefined} />
+      )}
 
       {/* Header */}
       <Header

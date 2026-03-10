@@ -27,16 +27,18 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
   const [skillFormOpen, setSkillFormOpen] = useState(false);
   const [connFormOpen, setConnFormOpen] = useState(false);
   const { people, skills, connections, palette, setPalette } = useStore();
+  const t = PALETTES[palette];
 
   return (
     <>
       <div
         className="absolute top-0 left-0 right-0 flex items-center justify-between px-5 py-2.5"
         style={{
-          background: 'rgba(5, 12, 26, 0.92)',
+          background: t.headerBg,
           backdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(59, 130, 246, 0.12)',
+          borderBottom: `1px solid ${t.headerBorder}`,
           zIndex: 20,
+          transition: 'background 0.4s, border-color 0.4s',
         }}
       >
         {/* Title */}
@@ -47,42 +49,42 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
                 width: 28,
                 height: 28,
                 borderRadius: 6,
-                background: 'linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%)',
-                border: '1px solid rgba(59,130,246,0.5)',
+                background: t.accentBtn,
+                border: `1px solid ${t.accentBorder}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Share2 size={13} color="#93c5fd" />
+              <Share2 size={13} color={t.accent} />
             </div>
             <div>
               <div
                 className="font-semibold text-sm tracking-wide"
-                style={{ color: '#e2e8f0', letterSpacing: '0.06em' }}
+                style={{ color: t.titleText, letterSpacing: '0.06em', transition: 'color 0.4s' }}
               >
                 Skill Matrix
               </div>
-              <div className="text-xs" style={{ color: '#334155', marginTop: -1 }}>Team Competency Graph</div>
+              <div className="text-xs" style={{ color: t.hintText, marginTop: -1, transition: 'color 0.4s' }}>Team Competency Graph</div>
             </div>
           </div>
 
           {/* Stats */}
           <div
             className="flex items-center gap-4 ml-1 pl-4"
-            style={{ borderLeft: '1px solid rgba(255,255,255,0.06)' }}
+            style={{ borderLeft: `1px solid ${t.divider}`, transition: 'border-color 0.4s' }}
           >
-            <span className="text-xs flex items-center gap-1.5" style={{ color: '#475569' }}>
-              <Users size={11} style={{ color: '#60a5fa' }} />
-              <span style={{ color: '#94a3b8' }}>{people.length}</span> Members
+            <span className="text-xs flex items-center gap-1.5" style={{ color: t.mutedText }}>
+              <Users size={11} style={{ color: t.accentLight }} />
+              <span style={{ color: t.bodyText }}>{people.length}</span> Members
             </span>
-            <span className="text-xs flex items-center gap-1.5" style={{ color: '#475569' }}>
+            <span className="text-xs flex items-center gap-1.5" style={{ color: t.mutedText }}>
               <Layers size={11} style={{ color: '#34d399' }} />
-              <span style={{ color: '#94a3b8' }}>{skills.length}</span> Skills
+              <span style={{ color: t.bodyText }}>{skills.length}</span> Skills
             </span>
-            <span className="text-xs flex items-center gap-1.5" style={{ color: '#475569' }}>
+            <span className="text-xs flex items-center gap-1.5" style={{ color: t.mutedText }}>
               <Zap size={11} style={{ color: '#a78bfa' }} />
-              <span style={{ color: '#94a3b8' }}>{connections.length}</span> Links
+              <span style={{ color: t.bodyText }}>{connections.length}</span> Links
             </span>
           </div>
         </div>
@@ -92,7 +94,11 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
           {/* View toggle */}
           <div
             className="flex items-center rounded-lg overflow-hidden"
-            style={{ border: '1px solid rgba(59,130,246,0.18)', background: 'rgba(8,15,30,0.7)' }}
+            style={{
+              border: `1px solid ${t.headerBorder}`,
+              background: t.toggleBg,
+              transition: 'background 0.4s, border-color 0.4s',
+            }}
           >
             {(['graph', 'matrix'] as const).map((view) => (
               <button
@@ -100,9 +106,9 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
                 onClick={() => onViewChange(view)}
                 className="flex items-center gap-1.5 text-xs h-7 px-2.5 transition-all"
                 style={{
-                  color: activeView === view ? '#93c5fd' : '#475569',
-                  background: activeView === view ? 'rgba(59,130,246,0.15)' : 'transparent',
-                  borderRight: view === 'graph' ? '1px solid rgba(59,130,246,0.12)' : 'none',
+                  color: activeView === view ? t.accent : t.mutedText,
+                  background: activeView === view ? t.accentBg : 'transparent',
+                  borderRight: view === 'graph' ? `1px solid ${t.headerBorder}` : 'none',
                   cursor: 'pointer',
                 }}
               >
@@ -116,11 +122,11 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
             size="sm"
             variant="ghost"
             onClick={onToggleSummary}
-            className="gap-1.5 text-xs h-8"
+            className="gap-1.5 text-xs h-8 transition-all"
             style={{
-              color: summaryOpen ? '#93c5fd' : '#475569',
-              border: summaryOpen ? '1px solid rgba(59,130,246,0.35)' : '1px solid transparent',
-              background: summaryOpen ? 'rgba(59,130,246,0.08)' : 'transparent',
+              color: summaryOpen ? t.accent : t.mutedText,
+              border: summaryOpen ? `1px solid ${t.accentBorder}` : '1px solid transparent',
+              background: summaryOpen ? t.accentBg : 'transparent',
             }}
           >
             <BarChart3 size={13} />
@@ -133,11 +139,11 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
               <Button
                 size="sm"
                 variant="ghost"
-                className="gap-1.5 text-xs h-8"
+                className="gap-1.5 text-xs h-8 transition-all"
                 style={{
-                  color: paletteOpen ? '#93c5fd' : '#475569',
-                  border: paletteOpen ? '1px solid rgba(59,130,246,0.35)' : '1px solid transparent',
-                  background: paletteOpen ? 'rgba(59,130,246,0.08)' : 'transparent',
+                  color: paletteOpen ? t.accent : t.mutedText,
+                  border: paletteOpen ? `1px solid ${t.accentBorder}` : '1px solid transparent',
+                  background: paletteOpen ? t.accentBg : 'transparent',
                 }}
               >
                 <Palette size={13} />
@@ -145,31 +151,38 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
             </PopoverTrigger>
             <PopoverContent
               align="end"
-              className="w-48 p-3"
+              className="w-52 p-3"
               style={{
-                background: 'rgba(5, 12, 26, 0.98)',
-                border: '1px solid rgba(59,130,246,0.2)',
+                background: t.panelBg,
+                border: `1px solid ${t.panelBorder}`,
                 backdropFilter: 'blur(16px)',
               }}
             >
-              <div className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#334155' }}>
+              <div className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: t.mutedText }}>
                 Color Palette
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2">
                 {(Object.entries(PALETTES) as [ColorPalette, typeof PALETTES[ColorPalette]][]).map(([id, p]) => (
                   <button
                     key={id}
                     onClick={() => { setPalette(id); setPaletteOpen(false); }}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs transition-all"
+                    className="flex flex-col items-center gap-1.5 px-2 py-2 rounded-md text-xs transition-all"
                     style={{
-                      background: palette === id ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.03)',
-                      border: `1px solid ${palette === id ? 'rgba(59,130,246,0.4)' : 'rgba(255,255,255,0.08)'}`,
-                      color: palette === id ? '#93c5fd' : '#64748b',
+                      background: palette === id ? t.accentBg : t.cardBg,
+                      border: `1px solid ${palette === id ? t.accentBorder : t.cardBorder}`,
+                      color: palette === id ? t.accent : t.mutedText,
                       cursor: 'pointer',
                     }}
                   >
-                    <div style={{ width: 14, height: 14, borderRadius: 3, background: p.swatch, flexShrink: 0 }} />
-                    {p.label}
+                    <div style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: 4,
+                      background: p.swatch,
+                      flexShrink: 0,
+                      border: `1px solid ${t.cardBorder}`,
+                    }} />
+                    <span style={{ fontSize: 10 }}>{p.label}</span>
                   </button>
                 ))}
               </div>
@@ -180,11 +193,12 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
             <PopoverTrigger
               className="inline-flex items-center gap-1.5 text-xs h-8 px-3 rounded-lg font-medium"
               style={{
-                background: 'linear-gradient(135deg, #1d4ed8, #1e3a8a)',
-                border: '1px solid rgba(59,130,246,0.5)',
+                background: t.accentBtn,
+                border: `1px solid ${t.accentBorder}`,
                 color: '#e0f2fe',
                 cursor: 'pointer',
-                boxShadow: '0 0 12px rgba(59,130,246,0.15)',
+                boxShadow: `0 0 12px ${t.accentBg}`,
+                transition: 'box-shadow 0.3s',
               }}
             >
               <Plus size={13} />
@@ -194,8 +208,8 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
               align="end"
               className="w-44 p-1"
               style={{
-                background: 'rgba(5, 12, 26, 0.98)',
-                border: '1px solid rgba(59,130,246,0.2)',
+                background: t.panelBg,
+                border: `1px solid ${t.panelBorder}`,
                 backdropFilter: 'blur(16px)',
               }}
             >
@@ -203,8 +217,8 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
                 <button
                   onClick={() => { setPersonFormOpen(true); setAddOpen(false); }}
                   className="flex items-center gap-2.5 px-3 py-2 rounded-md text-xs transition-colors text-left"
-                  style={{ color: '#93c5fd' }}
-                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'rgba(59,130,246,0.1)')}
+                  style={{ color: t.isDark ? '#93c5fd' : '#1d4ed8' }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = t.accentBg)}
                   onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
                 >
                   <Users size={12} /> Add Member
@@ -212,7 +226,7 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
                 <button
                   onClick={() => { setSkillFormOpen(true); setAddOpen(false); }}
                   className="flex items-center gap-2.5 px-3 py-2 rounded-md text-xs transition-colors text-left"
-                  style={{ color: '#6ee7b7' }}
+                  style={{ color: t.isDark ? '#6ee7b7' : '#059669' }}
                   onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'rgba(16,185,129,0.08)')}
                   onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
                 >
@@ -221,7 +235,7 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
                 <button
                   onClick={() => { setConnFormOpen(true); setAddOpen(false); }}
                   className="flex items-center gap-2.5 px-3 py-2 rounded-md text-xs transition-colors text-left"
-                  style={{ color: '#c4b5fd' }}
+                  style={{ color: t.isDark ? '#c4b5fd' : '#6d28d9' }}
                   onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'rgba(139,92,246,0.08)')}
                   onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
                 >
