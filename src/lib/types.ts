@@ -23,6 +23,8 @@ export interface Connection {
 
 export type NodeType = 'person' | 'skill';
 
+export type ColorPalette = 'navy' | 'slate' | 'emerald' | 'violet';
+
 export interface PersonNodeData extends Record<string, unknown> {
   id: string;
   name: string;

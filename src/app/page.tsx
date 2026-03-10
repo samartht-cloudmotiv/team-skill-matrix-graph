@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { useStore } from '@/lib/store';
 import { useSeedData } from '@/hooks/useSeedData';
+import { PALETTES } from '@/lib/constants';
 import GraphCanvas from '@/components/graph/GraphCanvas';
 import ParticleBackground from '@/components/graph/ParticleBackground';
 import DetailPanel from '@/components/panels/DetailPanel';
@@ -16,6 +17,7 @@ export default function Home() {
   const [hydrated, setHydrated] = useState(false);
   const [summaryOpen, setSummaryOpen] = useState(false);
   const [activeView, setActiveView] = useState<'graph' | 'matrix'>('graph');
+  const palette = useStore((s) => s.palette);
 
   // Subtle 3D tilt effect tracking mouse position (graph view only)
   const mouseX = useMotionValue(0);
@@ -68,7 +70,7 @@ export default function Home() {
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
-      style={{ background: 'radial-gradient(ellipse at 30% 20%, #1a2f4e 0%, #0d1b35 50%, #07111f 100%)' }}
+      style={{ background: PALETTES[palette].background }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >

@@ -1,4 +1,4 @@
-import { SkillCategory, Proficiency } from './types';
+import { SkillCategory, Proficiency, ColorPalette } from './types';
 
 export const CATEGORY_COLORS: Record<SkillCategory, { bg: string; glow: string; border: string; badge: string }> = {
   Frontend: {
@@ -82,3 +82,30 @@ export const PROFICIENCY_CONFIG: Record<Proficiency, {
 };
 
 export const SKILL_CATEGORIES: SkillCategory[] = ['Frontend', 'Backend', 'DevOps', 'Design', 'Data', 'Other'];
+
+export const PALETTES: Record<ColorPalette, {
+  label: string;
+  swatch: string;   // color shown in picker
+  background: string; // CSS gradient for page background
+}> = {
+  navy: {
+    label: 'Navy',
+    swatch: '#1a4a7a',
+    background: 'radial-gradient(ellipse at 30% 20%, #1a2f4e 0%, #0d1b35 50%, #07111f 100%)',
+  },
+  slate: {
+    label: 'Slate',
+    swatch: '#334155',
+    background: 'radial-gradient(ellipse at 30% 20%, #1e2938 0%, #111a26 50%, #080f18 100%)',
+  },
+  emerald: {
+    label: 'Emerald',
+    swatch: '#065f46',
+    background: 'radial-gradient(ellipse at 30% 20%, #0c2a1e 0%, #071a12 50%, #030e0a 100%)',
+  },
+  violet: {
+    label: 'Violet',
+    swatch: '#4c1d95',
+    background: 'radial-gradient(ellipse at 30% 20%, #1a1040 0%, #0f0a28 50%, #07051a 100%)',
+  },
+};

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Users, Layers, Zap, BarChart3, Share2, Grid3x3 } from 'lucide-react';
+import { Plus, Users, Layers, Zap, BarChart3, Share2, Grid3x3, Palette } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Popover, PopoverContent, PopoverTrigger,
@@ -10,6 +10,8 @@ import PersonForm from '@/components/forms/PersonForm';
 import SkillForm from '@/components/forms/SkillForm';
 import ConnectionForm from '@/components/forms/ConnectionForm';
 import { useStore } from '@/lib/store';
+import { PALETTES } from '@/lib/constants';
+import { ColorPalette } from '@/lib/types';
 
 interface Props {
   onToggleSummary: () => void;
@@ -20,10 +22,11 @@ interface Props {
 
 export default function Header({ onToggleSummary, summaryOpen, activeView, onViewChange }: Props) {
   const [addOpen, setAddOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const [personFormOpen, setPersonFormOpen] = useState(false);
   const [skillFormOpen, setSkillFormOpen] = useState(false);
   const [connFormOpen, setConnFormOpen] = useState(false);
-  const { people, skills, connections } = useStore();
+  const { people, skills, connections, palette, setPalette } = useStore();
 
   return (
     <>
@@ -123,6 +126,55 @@ export default function Header({ onToggleSummary, summaryOpen, activeView, onVie
             <BarChart3 size={13} />
             Analytics
           </Button>
+
+          {/* Palette picker */}
+          <Popover open={paletteOpen} onOpenChange={setPaletteOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="gap-1.5 text-xs h-8"
+                style={{
+                  color: paletteOpen ? '#93c5fd' : '#475569',
+                  border: paletteOpen ? '1px solid rgba(59,130,246,0.35)' : '1px solid transparent',
+                  background: paletteOpen ? 'rgba(59,130,246,0.08)' : 'transparent',
+                }}
+              >
+                <Palette size={13} />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="end"
+              className="w-48 p-3"
+              style={{
+                background: 'rgba(5, 12, 26, 0.98)',
+                border: '1px solid rgba(59,130,246,0.2)',
+                backdropFilter: 'blur(16px)',
+              }}
+            >
+              <div className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: '#334155' }}>
+                Color Palette
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {(Object.entries(PALETTES) as [ColorPalette, typeof PALETTES[ColorPalette]][]).map(([id, p]) => (
+                  <button
+                    key={id}
+                    onClick={() => { setPalette(id); setPaletteOpen(false); }}
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-md text-xs transition-all"
+                    style={{
+                      background: palette === id ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.03)',
+                      border: `1px solid ${palette === id ? 'rgba(59,130,246,0.4)' : 'rgba(255,255,255,0.08)'}`,
+                      color: palette === id ? '#93c5fd' : '#64748b',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <div style={{ width: 14, height: 14, borderRadius: 3, background: p.swatch, flexShrink: 0 }} />
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
 
           <Popover open={addOpen} onOpenChange={setAddOpen}>
             <PopoverTrigger

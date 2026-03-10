@@ -3,7 +3,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { nanoid } from 'nanoid';
-import { Person, Skill, Connection, Proficiency, NodeType } from './types';
+import { Person, Skill, Connection, Proficiency, NodeType, ColorPalette } from './types';
 
 interface AppState {
   // Data
@@ -32,6 +32,10 @@ interface AppState {
   updateConnection: (id: string, proficiency: Proficiency) => void;
   deleteConnection: (id: string) => void;
 
+  // Theme
+  palette: ColorPalette;
+  setPalette: (palette: ColorPalette) => void;
+
   // UI actions
   setSelectedNode: (id: string | null, type: NodeType | null) => void;
   setHighlightedNodes: (ids: Set<string>) => void;
@@ -46,6 +50,10 @@ export const useStore = create<AppState>()(
       skills: [],
       connections: [],
       isSeeded: false,
+
+      // Theme
+      palette: 'navy' as ColorPalette,
+      setPalette: (palette) => set({ palette }),
 
       // UI state
       selectedNodeId: null,
@@ -146,6 +154,7 @@ export const useStore = create<AppState>()(
         skills: state.skills,
         connections: state.connections,
         isSeeded: state.isSeeded,
+        palette: state.palette,
       }),
     }
   )
