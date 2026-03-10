@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from
 import { useStore } from '@/lib/store';
 import { useSeedData } from '@/hooks/useSeedData';
 import GraphCanvas from '@/components/graph/GraphCanvas';
+import ParticleBackground from '@/components/graph/ParticleBackground';
 import DetailPanel from '@/components/panels/DetailPanel';
 import SummaryPanel from '@/components/panels/SummaryPanel';
 import Header from '@/components/layout/Header';
@@ -49,7 +50,7 @@ export default function Home() {
     return (
       <div
         className="w-screen h-screen flex items-center justify-center"
-        style={{ background: 'radial-gradient(ellipse at center, #1a0a2e 0%, #080612 100%)' }}
+        style={{ background: 'radial-gradient(ellipse at center, #0d1b35 0%, #07111f 100%)' }}
       >
         <div className="flex flex-col items-center gap-4">
           <div
@@ -67,10 +68,13 @@ export default function Home() {
   return (
     <div
       className="relative w-screen h-screen overflow-hidden"
-      style={{ background: 'radial-gradient(ellipse at 25% 25%, #0a1628 0%, #060e1c 45%, #030810 100%)' }}
+      style={{ background: 'radial-gradient(ellipse at 30% 20%, #1a2f4e 0%, #0d1b35 50%, #07111f 100%)' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Animated particle background */}
+      <ParticleBackground mouseX={activeView === 'graph' ? springX : undefined} mouseY={activeView === 'graph' ? springY : undefined} />
+
       {/* Header */}
       <Header
         onToggleSummary={() => setSummaryOpen((v) => !v)}

@@ -123,8 +123,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    /* Professional deep navy — enterprise B2B tone */
-    background: radial-gradient(ellipse at 25% 25%, #0a1628 0%, #060e1c 45%, #030810 100%);
+    /* Professional navy — enterprise B2B tone */
+    background: radial-gradient(ellipse at 30% 20%, #1a2f4e 0%, #0d1b35 50%, #07111f 100%);
     min-height: 100vh;
     overflow: hidden;
   }
