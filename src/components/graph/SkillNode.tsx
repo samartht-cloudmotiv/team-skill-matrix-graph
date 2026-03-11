@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { NodeProps, Handle, Position } from '@xyflow/react';
 import { motion } from 'framer-motion';
 import {
@@ -147,4 +147,4 @@ function SkillNode({ data }: NodeProps) {
   );
 }
 
-export default memo(SkillNode);
+export default SkillNode;

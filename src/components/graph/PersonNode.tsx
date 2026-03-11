@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { NodeProps, Handle, Position } from '@xyflow/react';
 import { motion } from 'framer-motion';
 import { PersonNodeData } from '@/lib/types';
@@ -135,4 +135,4 @@ function PersonNode({ data }: NodeProps) {
   );
 }
 
-export default memo(PersonNode);
+export default PersonNode;

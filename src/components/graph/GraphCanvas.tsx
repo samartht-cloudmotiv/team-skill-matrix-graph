@@ -11,7 +11,7 @@ import {
   useEdgesState,
   Node,
   Edge,
-  EdgeChange,
+  NodeChange,
   NodeTypes,
   EdgeTypes,
   ReactFlowInstance,
@@ -43,17 +43,37 @@ const pinnedPositions = new Map<string, { x: number; y: number }>();
 function GraphCanvasInner() {
   const { nodes: rawNodes, edges: rawEdges } = useGraphData();
   const { setSelectedNode, selectedNodeId } = useStore();
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
-  const [edges, setEdges, onEdgesChangeRaw] = useEdgesState<Edge>([]);
-
-  // Block edge additions from React Flow (we only create edges via ConnectionForm)
-  const onEdgesChange = useCallback((changes: EdgeChange[]) => {
-    const filtered = changes.filter((c) => c.type !== 'add');
-    if (filtered.length > 0) onEdgesChangeRaw(filtered);
-  }, [onEdgesChangeRaw]);
+  const [nodes, setNodes] = useNodesState<Node>([]);
+  const [edges, setEdges] = useEdgesState<Edge>([]);
   const rfInstance = useRef<ReactFlowInstance | null>(null);
   const layoutDone = useRef(false);
   const prevNodeIds = useRef(new Set<string>());
+
+  // Only allow position & dimension changes from React Flow (dragging).
+  // Block add/remove/reset — we manage node topology through the Zustand store.
+  const handleNodesChange = useCallback((changes: NodeChange[]) => {
+    const allowed = changes.filter(
+      (c) => c.type === 'position' || c.type === 'dimensions' || c.type === 'select'
+    );
+    if (allowed.length > 0) {
+      setNodes((prev) => {
+        let next = prev;
+        for (const change of allowed) {
+          if (change.type === 'position' && change.position) {
+            next = next.map((n) =>
+              n.id === change.id ? { ...n, position: change.position! } : n
+            );
+          }
+          if (change.type === 'dimensions' && 'dimensions' in change) {
+            next = next.map((n) =>
+              n.id === change.id ? { ...n, measured: { ...(n.measured ?? {}), ...((change as any).dimensions ?? {}) } } : n
+            );
+          }
+        }
+        return next;
+      });
+    }
+  }, [setNodes]);
 
   const runLayout = useCallback(
     (forceReset = false) => {
@@ -76,7 +96,7 @@ function GraphCanvasInner() {
         rfInstance.current?.fitView({ padding: 0.12, duration: 700 });
       }, 100);
     },
-    [rawNodes, rawEdges]
+    [rawNodes, rawEdges, setNodes, setEdges]
   );
 
   useEffect(() => {
@@ -91,7 +111,7 @@ function GraphCanvasInner() {
       runLayout(false);
       layoutDone.current = true;
     } else {
-      // Only update data (dimming, selection state) without moving nodes
+      // Only update data (dimming, selection state, counts) without moving nodes
       setNodes((prev) =>
         prev.map((pn) => {
           const updated = rawNodes.find((n) => n.id === pn.id);
@@ -100,7 +120,7 @@ function GraphCanvasInner() {
       );
       setEdges(rawEdges);
     }
-  }, [rawNodes, rawEdges, runLayout]);
+  }, [rawNodes, rawEdges, runLayout, setNodes, setEdges]);
 
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
@@ -139,8 +159,7 @@ function GraphCanvasInner() {
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+        onNodesChange={handleNodesChange}
         onNodeClick={onNodeClick}
         onPaneClick={onPaneClick}
         onNodeDragStop={onNodeDragStop}
@@ -153,6 +172,9 @@ function GraphCanvasInner() {
         maxZoom={2.5}
         nodesDraggable
         nodesConnectable={false}
+        edgesFocusable={false}
+        edgesReconnectable={false}
+        deleteKeyCode={null}
         elementsSelectable
         style={{ background: 'transparent' }}
         proOptions={{ hideAttribution: true }}

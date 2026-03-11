@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import { EdgeProps, getBezierPath } from '@xyflow/react';
 import { ProficiencyEdgeData } from '@/lib/types';
 import { PROFICIENCY_CONFIG } from '@/lib/constants';
@@ -160,4 +160,4 @@ function ProficiencyEdge({
   );
 }
 
-export default memo(ProficiencyEdge);
+export default ProficiencyEdge;
