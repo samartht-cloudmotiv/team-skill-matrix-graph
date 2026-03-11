@@ -49,7 +49,7 @@ export function useGraphData() {
       data: {
         proficiency: c.proficiency,
         connectionId: c.id,
-        isDimmed: hasSelection && !highlightedNodeIds.has(c.personId) && !highlightedNodeIds.has(c.skillId),
+        isDimmed: hasSelection && selectedNodeId !== c.personId && selectedNodeId !== c.skillId,
       } as ProficiencyEdgeData,
     }));
   }, [connections, selectedNodeId, highlightedNodeIds]);

@@ -46,7 +46,7 @@ export default function Home() {
     return () => { clearTimeout(t); unsub?.(); };
   }, []);
 
-  useSeedData();
+  useSeedData(hydrated);
 
   if (!hydrated) {
     return (

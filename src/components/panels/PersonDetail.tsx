@@ -11,15 +11,31 @@ import PersonForm from '@/components/forms/PersonForm';
 import ConnectionForm from '@/components/forms/ConnectionForm';
 import ConfirmDialog from '@/components/forms/ConfirmDialog';
 
-function ProficiencyBar({ proficiency }: { proficiency: Proficiency }) {
+const PROF_CYCLE: Proficiency[] = ['learning', 'familiar', 'expert'];
+
+function ProficiencyBar({ proficiency, connectionId }: { proficiency: Proficiency; connectionId?: string }) {
+  const updateConnection = useStore((s) => s.updateConnection);
   const levels: Proficiency[] = ['learning', 'familiar', 'expert'];
   const idx = levels.indexOf(proficiency);
+
+  const handleCycle = (e: React.MouseEvent) => {
+    if (!connectionId) return;
+    e.stopPropagation();
+    const next = PROF_CYCLE[(PROF_CYCLE.indexOf(proficiency) + 1) % 3];
+    updateConnection(connectionId, next);
+  };
+
   return (
-    <div className="flex gap-1 items-center">
+    <div
+      className="flex gap-1 items-center"
+      onClick={handleCycle}
+      style={{ cursor: connectionId ? 'pointer' : 'default' }}
+      title={connectionId ? 'Click to cycle: Learning → Familiar → Expert' : undefined}
+    >
       {levels.map((lvl, i) => (
         <div
           key={lvl}
-          className="h-2 rounded-full flex-1"
+          className="h-2 rounded-full flex-1 transition-all"
           style={{
             background: i <= idx
               ? `linear-gradient(90deg, ${PROFICIENCY_CONFIG[proficiency].edgeColor}, ${PROFICIENCY_CONFIG[proficiency].edgeColor}88)`
@@ -28,7 +44,7 @@ function ProficiencyBar({ proficiency }: { proficiency: Proficiency }) {
           }}
         />
       ))}
-      <span className="text-xs ml-1" style={{ color: PROFICIENCY_CONFIG[proficiency].edgeColor, minWidth: 52 }}>
+      <span className="text-xs ml-1 transition-colors" style={{ color: PROFICIENCY_CONFIG[proficiency].edgeColor, minWidth: 52 }}>
         {'★'.repeat(PROFICIENCY_CONFIG[proficiency].stars)}{'☆'.repeat(3 - PROFICIENCY_CONFIG[proficiency].stars)} {PROFICIENCY_CONFIG[proficiency].label}
       </span>
     </div>
@@ -156,7 +172,7 @@ export default function PersonDetail({ personId }: { personId: string }) {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-xs font-semibold truncate" style={{ color: '#cbd5e1' }}>{skill.name}</div>
-                <ProficiencyBar proficiency={conn.proficiency} />
+                <ProficiencyBar proficiency={conn.proficiency} connectionId={conn.id} />
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); deleteConnection(conn.id); }}

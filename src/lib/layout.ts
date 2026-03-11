@@ -4,9 +4,10 @@ const CATEGORY_ORDER = ['Frontend', 'Backend', 'DevOps', 'Design', 'Data', 'Othe
 
 /**
  * Deterministic bipartite layout:
- *   • People  → single column on the left, sorted alphabetically
+ *   • People  → column(s) on the left, sorted alphabetically
  *   • Skills  → grid on the right, sorted by category then name
  *
+ * Scales dynamically for 50+ nodes of either type.
  * No randomness — Reset Layout always produces the same result.
  */
 export function computeLayout(
@@ -21,22 +22,38 @@ export function computeLayout(
   const skillNodes  = nodes.filter((n) => n.type === 'skill');
   const positions   = new Map<string, { x: number; y: number }>();
 
-  // ── People: left column, alphabetical ───────────────────────────────────
+  const pCount = personNodes.length;
+  const sCount = skillNodes.length;
+  const total  = pCount + sCount;
+
+  // Scale canvas dimensions when there are many nodes
+  const scaledW = total > 30 ? width * (1 + (total - 30) * 0.012) : width;
+  const scaledH = Math.max(height, pCount * 65, Math.ceil(sCount / 6) * 100);
+
+  // ── People: left column(s), alphabetical ─────────────────────────────────
   const sortedPeople = [...personNodes].sort((a, b) =>
     String(a.data.name ?? '').localeCompare(String(b.data.name ?? ''))
   );
 
-  const pCount  = sortedPeople.length;
-  const pGap    = Math.min(140, Math.max(80, (height - 160) / Math.max(pCount, 1)));
-  const pTotalH = (pCount - 1) * pGap;
-  const pStartY = (height - pTotalH) / 2;
-  const pX      = width * 0.13;
+  // Use multiple columns when >20 people to keep it readable
+  const pCols       = pCount <= 20 ? 1 : pCount <= 50 ? 2 : 3;
+  const pPerCol     = Math.ceil(pCount / pCols);
+  const pGap        = Math.min(130, Math.max(55, (scaledH - 120) / Math.max(pPerCol, 1)));
+  const pColGap     = 160;
+  const pStartX     = scaledW * 0.08;
 
   sortedPeople.forEach((p, i) => {
-    positions.set(p.id, { x: pX, y: pStartY + i * pGap });
+    const col = Math.floor(i / pPerCol);
+    const row = i % pPerCol;
+    const totalH = (Math.min(pPerCol, pCount - col * pPerCol) - 1) * pGap;
+    const startY = (scaledH - totalH) / 2;
+    positions.set(p.id, {
+      x: pStartX + col * pColGap,
+      y: startY + row * pGap,
+    });
   });
 
-  // ── Skills: right-side grid, by category then name ───────────────────────
+  // ── Skills: right-side grid, by category then name ────────────────────────
   const sortedSkills = [...skillNodes].sort((a, b) => {
     const catA = CATEGORY_ORDER.indexOf(String(a.data.category ?? 'Other'));
     const catB = CATEGORY_ORDER.indexOf(String(b.data.category ?? 'Other'));
@@ -44,18 +61,25 @@ export function computeLayout(
     return String(a.data.name ?? '').localeCompare(String(b.data.name ?? ''));
   });
 
-  const sCount = sortedSkills.length;
   if (sCount === 0) return positions;
 
-  // Choose column count for a roughly landscape grid
-  const cols = sCount <= 3 ? sCount : sCount <= 8 ? 3 : sCount <= 15 ? 4 : 5;
+  // Dynamic column count that scales with skill count
+  const cols = sCount <= 3 ? sCount
+    : sCount <= 8  ? 3
+    : sCount <= 15 ? 4
+    : sCount <= 25 ? 5
+    : sCount <= 40 ? 6
+    : sCount <= 60 ? 7
+    : 8;
   const rows = Math.ceil(sCount / cols);
 
-  const rightW  = width * 0.56;
-  const sGapX   = Math.min(195, rightW / Math.max(cols, 1));
-  const sGapY   = Math.min(155, (height - 130) / Math.max(rows, 1));
-  const sStartX = width * 0.41;
-  const sStartY = (height - (rows - 1) * sGapY) / 2;
+  // Leave room for people columns on the left
+  const peopleRightEdge = pStartX + (pCols - 1) * pColGap + 160;
+  const sStartX = Math.max(scaledW * 0.35, peopleRightEdge);
+  const rightW  = scaledW - sStartX - 40;
+  const sGapX   = Math.min(180, Math.max(100, rightW / Math.max(cols, 1)));
+  const sGapY   = Math.min(140, Math.max(70, (scaledH - 100) / Math.max(rows, 1)));
+  const sStartY = (scaledH - (rows - 1) * sGapY) / 2;
 
   sortedSkills.forEach((s, i) => {
     const col = i % cols;

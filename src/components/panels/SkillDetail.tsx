@@ -13,17 +13,31 @@ import ConfirmDialog from '@/components/forms/ConfirmDialog';
 
 const HEX_CLIP = 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)';
 
-function ProficiencyBadge({ proficiency }: { proficiency: Proficiency }) {
+const PROF_CYCLE: Proficiency[] = ['learning', 'familiar', 'expert'];
+
+function ProficiencyBadge({ proficiency, connectionId }: { proficiency: Proficiency; connectionId?: string }) {
+  const updateConnection = useStore((s) => s.updateConnection);
   const cfg = PROFICIENCY_CONFIG[proficiency];
+
+  const handleCycle = (e: React.MouseEvent) => {
+    if (!connectionId) return;
+    e.stopPropagation();
+    const next = PROF_CYCLE[(PROF_CYCLE.indexOf(proficiency) + 1) % 3];
+    updateConnection(connectionId, next);
+  };
+
   return (
     <span
-      className="text-xs px-2 py-0.5 rounded font-medium"
+      className="text-xs px-2 py-0.5 rounded font-medium transition-all"
       style={{
         background: `${cfg.edgeColor}18`,
         color: cfg.edgeColor,
         border: `1px solid ${cfg.edgeColor}44`,
         boxShadow: proficiency === 'expert' ? `0 0 8px ${cfg.edgeColor}33` : 'none',
+        cursor: connectionId ? 'pointer' : 'default',
       }}
+      onClick={handleCycle}
+      title={connectionId ? 'Click to cycle: Learning → Familiar → Expert' : undefined}
     >
       {'★'.repeat(cfg.stars)}{'☆'.repeat(3 - cfg.stars)} {cfg.label}
     </span>
@@ -183,7 +197,7 @@ export default function SkillDetail({ skillId }: { skillId: string }) {
                 <div className="text-xs font-semibold truncate" style={{ color: '#cbd5e1' }}>{person.name}</div>
                 <div className="text-xs truncate" style={{ color: '#666' }}>{person.role}</div>
               </div>
-              <ProficiencyBadge proficiency={conn.proficiency} />
+              <ProficiencyBadge proficiency={conn.proficiency} connectionId={conn.id} />
               <button
                 onClick={(e) => { e.stopPropagation(); deleteConnection(conn.id); }}
                 className="flex-shrink-0 opacity-40 hover:opacity-100 transition-opacity"

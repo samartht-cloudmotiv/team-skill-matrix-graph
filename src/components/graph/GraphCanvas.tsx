@@ -11,6 +11,7 @@ import {
   useEdgesState,
   Node,
   Edge,
+  EdgeChange,
   NodeTypes,
   EdgeTypes,
   ReactFlowInstance,
@@ -43,7 +44,13 @@ function GraphCanvasInner() {
   const { nodes: rawNodes, edges: rawEdges } = useGraphData();
   const { setSelectedNode, selectedNodeId } = useStore();
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+  const [edges, setEdges, onEdgesChangeRaw] = useEdgesState<Edge>([]);
+
+  // Block edge additions from React Flow (we only create edges via ConnectionForm)
+  const onEdgesChange = useCallback((changes: EdgeChange[]) => {
+    const filtered = changes.filter((c) => c.type !== 'add');
+    if (filtered.length > 0) onEdgesChangeRaw(filtered);
+  }, [onEdgesChangeRaw]);
   const rfInstance = useRef<ReactFlowInstance | null>(null);
   const layoutDone = useRef(false);
   const prevNodeIds = useRef(new Set<string>());
@@ -93,7 +100,7 @@ function GraphCanvasInner() {
       );
       setEdges(rawEdges);
     }
-  }, [rawNodes, rawEdges]);
+  }, [rawNodes, rawEdges, runLayout]);
 
   const onNodeClick = useCallback(
     (_: React.MouseEvent, node: Node) => {
@@ -145,6 +152,7 @@ function GraphCanvasInner() {
         minZoom={0.25}
         maxZoom={2.5}
         nodesDraggable
+        nodesConnectable={false}
         elementsSelectable
         style={{ background: 'transparent' }}
         proOptions={{ hideAttribution: true }}

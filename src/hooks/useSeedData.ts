@@ -5,11 +5,11 @@ import Papa from 'papaparse';
 import { useStore } from '@/lib/store';
 import { Person, Skill, Connection, Proficiency, SkillCategory } from '@/lib/types';
 
-export function useSeedData() {
+export function useSeedData(hydrated: boolean) {
   const { isSeeded, seedData } = useStore();
 
   useEffect(() => {
-    if (isSeeded) return;
+    if (!hydrated || isSeeded) return;
 
     async function loadAndSeed() {
       try {
@@ -43,5 +43,5 @@ export function useSeedData() {
     }
 
     loadAndSeed();
-  }, [isSeeded, seedData]);
+  }, [hydrated, isSeeded, seedData]);
 }
